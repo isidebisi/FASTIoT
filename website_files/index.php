@@ -2,7 +2,7 @@
 
 $servername = "localhost";
 $dBUsername = "id21476219_ismaelfrei";
-$dBPassword = "FASTIoT_2023"";
+$dBPassword = "FASTIoT_2023";
 $dBName = "id21476219_esp32";
 
 $conn = mysqli_connect($servername, $dBUsername, $dBPassword, $dBName);
@@ -10,6 +10,13 @@ $conn = mysqli_connect($servername, $dBUsername, $dBPassword, $dBName);
 if (!$conn) {
 	die("Connection failed: ".mysqli_connect_error());
 }
+
+// Check if form is submitted - MODE
+if (isset($_POST['change_mode'])) {
+    $new_mode = $_POST['operation_mode'];
+    $update = mysqli_query($conn, "UPDATE Operation_Mode SET status = '$new_mode' WHERE id = 1;");
+}
+
 
 
 if (isset($_POST['toggle_LED'])) {
@@ -27,11 +34,42 @@ if (isset($_POST['toggle_LED'])) {
 
 
 
+// Fetch the current operation mode
+$sqlO = "SELECT * FROM Operation_Mode WHERE id = 1;";
+$resultO = mysqli_query($conn, $sqlO);
+$rowO = mysqli_fetch_assoc($resultO);
+$current_mode = $rowO['status'];
+
+
 $sql = "SELECT * FROM LED_status;";
 $result   = mysqli_query($conn, $sql);
-$row  = mysqli_fetch_assoc($result);	
-
+$row  = mysqli_fetch_assoc($result);
 ?>
+
+<!-- Display the current operation mode -->
+<p>Current Operation Mode: 
+<?php 
+switch ($current_mode) {
+    case 0:
+        echo "OFF";
+        break;
+    case 1:
+        echo "MANUAL";
+        break;
+    case 2:
+        echo "TIMER";
+        break;
+    case 3:
+        echo "AUTOMATIC";
+        break;
+    default:
+        echo "UNKNOWN";
+}
+?>
+</p>
+
+
+	
 
 <style>
 	.wrapper{
@@ -85,6 +123,18 @@ $row  = mysqli_fetch_assoc($result);
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+
+	<!-- Form to change the operation mode -->
+	<form method="post" action="">
+		<select name="operation_mode">
+			<option value="0" <?php if ($current_mode == 0) echo 'selected'; ?>>OFF</option>
+			<option value="1" <?php if ($current_mode == 1) echo 'selected'; ?>>MANUAL</option>
+			<option value="2" <?php if ($current_mode == 2) echo 'selected'; ?>>TIMER</option>
+			<option value="3" <?php if ($current_mode == 3) echo 'selected'; ?>>AUTOMATIC</option>
+		</select>
+		<input type="submit" name="change_mode" value="Change Mode">
+	</form>
+
 	<div class="wrapper" id="refresh">
 		<div class="col_3">
 		</div>
@@ -140,4 +190,3 @@ $row  = mysqli_fetch_assoc($result);
 </body>
 </html>
 
-</html>
