@@ -4,10 +4,10 @@
 #include <Arduino.h>
 
 enum Mode {
-    MANUAL,
-    TIMER,
-    AUTOMATIC,
-    OFF
+    OFF = 0,
+    MANUAL = 1,
+    TIMER = 2,
+    AUTOMATIC = 3,
 };
 
 
