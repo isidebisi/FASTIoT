@@ -86,8 +86,8 @@ void loop() {
       } else if (receiveData == "Operation_Mode_is_3") {
           currentMode = AUTOMATIC;
       }
-      Serial.Print("Current mode: ");
-      Serial.Println(currentMode);
+      Serial.print("Current mode: ");
+      Serial.println(currentMode);
     }
 
   }
