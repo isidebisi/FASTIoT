@@ -21,10 +21,11 @@ enum Mode {
 *
 */
 
+
+void offMode();
 void manualMode();
 void timerMode();
 void automaticMode();
-void offMode();
 void switchMode(Mode mode);
 
 #endif // MODES_H

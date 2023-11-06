@@ -13,11 +13,12 @@ const char* password =  "hallohallo";     //Add WIFI password
 
 
 //Variables used in the code
-String LED_id = "1";                  //Just in case you control more than 1 LED
+String LED_id = "1";                  
+String MODE_id = "1";                 
 String data_to_send = "";             //Text data to send to the server
 String receiveData = "";              //Text data received from the server
 unsigned int Actual_Millis, Previous_Millis;
-int refresh_time = 200;               //Refresh rate of connection to website (recommended more than 1s)
+int refresh_time = 1000;               //Refresh rate of connection to website (recommended more than 1s)
 
 String formattedDate;
 String dayStamp;
@@ -25,6 +26,7 @@ String timeStamp;
 
 //Inputs/outputs
 int LED = 2;                          //Connect LED on this pin (add 150ohm resistor)
+Mode currentMode = OFF;               //Current mode of the system
 
 
 
@@ -72,6 +74,21 @@ void loop() {
         else if(receiveData == "LED_is_on"){
           digitalWrite(LED, HIGH);
         }
+
+      data_to_send = "check_Operation_Mode=" + MODE_id;
+      exchangeServer(&data_to_send, &receiveData);
+      if (receiveData == "Operation_Mode_is_0") {
+          currentMode = OFF;
+      } else if (receiveData == "Operation_Mode_is_1") {
+          currentMode = MANUAL;
+      } else if (receiveData == "Operation_Mode_is_2") {
+          currentMode = TIMER;
+      } else if (receiveData == "Operation_Mode_is_3") {
+          currentMode = AUTOMATIC;
+      }
+      Serial.Print("Current mode: ");
+      Serial.Println(currentMode);
     }
+
   }
 }
