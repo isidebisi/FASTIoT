@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+#define SPRAY_TIME_MS 15*1000     //how long we want to spray in milli seconds
+
 enum Mode {
     OFF = 0,
     MANUAL = 1,
@@ -26,6 +28,6 @@ void offMode();
 void manualMode();
 void timerMode();
 void automaticMode();
-void switchMode(Mode mode);
+void executeMode(Mode mode);
 
 #endif // MODES_H

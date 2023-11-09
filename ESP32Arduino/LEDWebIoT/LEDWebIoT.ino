@@ -6,6 +6,9 @@
 #include "time.h"
 #include "serverCommunication.h"
 
+#define SLEEP_TIME_MS 1*1000                    //sleep time expressed in milli seconds
+#define SLEEP_TIME_US SLEEP_TIME_MS*1000        //sleep time expressed in micro seconds
+#define LED_PIN 4
 
 //Add WIFI data
 const char* ssid = "Ismael";              //Add your WIFI network name 
@@ -18,18 +21,22 @@ String MODE_id = "1";
 String data_to_send = "";             //Text data to send to the server
 String receiveData = "";              //Text data received from the server
 unsigned int Actual_Millis, Previous_Millis;
-int refresh_time = 1000;               //Refresh rate of connection to website (recommended more than 1s)
 
-String formattedDate;
+
+
 String dayStamp;
-String timeStamp;
+unsigned int hour;
+unsigned int minute;
+unsigned int second;
+
 
 //Inputs/outputs
-int LED = 2;                          //Connect LED on this pin (add 150ohm resistor)
+int LED = LED_PIN;                          //Connect LED on this pin (add 150ohm resistor)
 Mode currentMode = OFF;               //Current mode of the system
 
 
-
+//function definitions
+void goToDeepSleep();
 
 void setup() {
   delay(10);
@@ -55,12 +62,12 @@ void setup() {
 void loop() {  
   //We make the refresh loop using millis() so we don't have to sue delay();
   Actual_Millis = millis();
-  if(Actual_Millis - Previous_Millis > refresh_time){
+  if(Actual_Millis - Previous_Millis > SLEEP_TIME_MS){
     Previous_Millis = Actual_Millis;  
 
     //Get time
     
-    getTime(&formattedDate, &dayStamp, &timeStamp);
+    getTime(&dayStamp, &hour, &minute, &second);
 
     if(WiFi.status()== WL_CONNECTED){                   //Check WiFi connection status  
 
@@ -91,4 +98,11 @@ void loop() {
     }
 
   }
+}
+
+void goToDeepSleep(){
+  Serial.print("Going to deep sleep . . .");
+
+  esp_sleep_enable_timer_wakeup(SLEEP_TIME_US);
+  esp_deep_sleep_start();
 }

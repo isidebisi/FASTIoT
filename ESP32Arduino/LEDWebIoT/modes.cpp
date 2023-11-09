@@ -4,22 +4,22 @@
 
 
 void manualMode() {
-    // Implement manual mode functionality here
+    
 }
 
 void timerMode() {
-    // Implement timer mode functionality here
+    
 }
 
 void automaticMode() {
-    // Implement automatic mode functionality here
+    
 }
 
 void offMode() {
-    // Implement off mode functionality here
+    
 }
 
-void switchMode(Mode mode) {
+void executeMode(Mode mode) {
     switch(mode) {
         case MANUAL:
             manualMode();

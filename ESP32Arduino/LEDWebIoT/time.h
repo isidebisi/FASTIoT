@@ -12,6 +12,6 @@
 
 void setupTime();
 
-void getTime(String* formattedDate, String* dayStamp, String* timeStamp);
+void getTime(String* dayStamp, unsigned int* hour, unsigned int* minute, unsigned int* second);
 
 #endif // TIME_H
