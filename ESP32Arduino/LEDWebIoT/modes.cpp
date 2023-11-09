@@ -24,8 +24,8 @@ void automaticMode() {
     // Set Lat and Lon for Location
     float threshold_temp = 4;
     float threshold_humidity = 75;
-    String lat = "46.111";
-    String lon = "7.006";
+    String lat = "46.519";
+    String lon = "6.633";
 
     fetchWeatherData(lat, lon, temperatures, humidities, dateTimeValues);
 

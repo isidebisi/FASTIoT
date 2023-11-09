@@ -1,5 +1,5 @@
-#include <ArduinoJson.h>
-#include <WiFiClient.h>
+#include <ArduinoJson.h>    //Library to download
+#include <WiFiClient.h>   
 #include <HTTPClient.h>
 #include <vector>
 #include "WeatherFetcher.h"
