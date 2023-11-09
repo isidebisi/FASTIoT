@@ -9,11 +9,11 @@
 
 
 void manualMode() {
-    
+    Serial.println("We will now spray... Manual Mode");
 }
 
 void timerMode() {
-    
+    Serial.println("We are in Timer Mode...");
 }
 
 void automaticMode() {

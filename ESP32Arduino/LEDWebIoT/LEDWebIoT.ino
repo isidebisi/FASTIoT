@@ -71,21 +71,21 @@ void loop() {
 
     if(WiFi.status()== WL_CONNECTED){                   //Check WiFi connection status  
 
-      //data_to_send = "check_LED_status=" + LED_id;      //send text: "check_LED_status"
+      data_to_send = "check_LED_status=" + LED_id;      //send text: "check_LED_status"
       
-      //exchangeServer(&data_to_send, &receiveData);
-      //if(receiveData == "LED_is_off"){
-      //    digitalWrite(LED, LOW);
-      //  }
+      exchangeServer(&data_to_send, &receiveData);
+      if(receiveData == "LED_is_off"){
+          digitalWrite(LED, LOW);
+        }
         //If the received data is LED_is_on, we set HIGH the LED pin
-      //  else if(receiveData == "LED_is_on"){
-      //    digitalWrite(LED, HIGH);
-      //  }
+        else if(receiveData == "LED_is_on"){
+          digitalWrite(LED, HIGH);
+        }
 
-      //data_to_send = "check_Operation_Mode=" + MODE_id;
-      //exchangeServer(&data_to_send, &receiveData);
+      data_to_send = "check_Operation_Mode=" + MODE_id;
+      exchangeServer(&data_to_send, &receiveData);
 
-      String receiveData = "Operation_Mode_is_3";
+      //String receiveData = "Operation_Mode_is_3";
       if (receiveData == "Operation_Mode_is_0") {
           currentMode = OFF;
       } else if (receiveData == "Operation_Mode_is_1") {
