@@ -2,12 +2,13 @@
 #include <WiFiClient.h>
 #include <HTTPClient.h>
 #include <vector>
+#include "WeatherFetcher.h"
 
-std::vector<float> temperatures;
-std::vector<float> humidities;
-std::vector<String> dateTimeValues;
 
-void fetchWeatherData(const String& lat, const String& lon) {
+void fetchWeatherData(const String& lat, const String& lon,
+                      std::vector<float>& temperatures, std::vector<float>& humidities,
+                      std::vector<String>& dateTimeValues){
+
   const String key = "a93c60a4d5a36a73d22d6cc0ddc41db1";
   const String endpoint = "http://api.openweathermap.org/data/2.5/forecast?";
   const String lat_lon = "&";
@@ -44,19 +45,11 @@ void fetchWeatherData(const String& lat, const String& lon) {
         dateTimeValues.push_back(dt_txt);
       }
 
-      //for (int i = 0; i < temperatures.size(); ++i) {
-      //  String output = "Date Time: " + dateTimeValues[i] + ", Temperature: " + String(temperatures[i]) + "°C, Humidity: " + String(humidities[i]) + "%";
-      //  Serial.println(output);
-      //}
+      for (int i = 0; i < temperatures.size(); ++i) {
+        String output = "Date Time: " + dateTimeValues[i] + ", Temperature: " + String(temperatures[i]) + "°C, Humidity: " + String(humidities[i]) + "%";
+        Serial.println(output);
+      }
 
-      //for (size_t index = 0; index < temperatures.size(); ++index) {
-      //  float temp = temperatures[index];
-
-      //  if (temp < threshold_temp) {
-      //    Serial.println("Under " + String(threshold_temp) + "°C -> Spray, because " + String(dateTimeValues[index]));
-      //    break; // Exit the loop since we found a temperature under the threshold
-      //  }
-      //}
     } else {
       Serial.println("Error on HTTP request");
     }
