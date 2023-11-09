@@ -9,18 +9,21 @@
 #define SLEEP_TIME_MS 1*1000                    //sleep time expressed in milli seconds
 #define SLEEP_TIME_US SLEEP_TIME_MS*1000        //sleep time expressed in micro seconds
 #define LED_PIN 4
+#define SPRAY_TIME_MS 30*1000       //how long we want to spray in milli seconds
 
 //Add WIFI data
 const char* ssid = "Ismael";              //Add your WIFI network name 
 const char* password =  "hallohallo";     //Add WIFI password
 
 
-//Variables used in the code
+//global Variables used in the code
 String LED_id = "1";                  
 String MODE_id = "1";                 
 String data_to_send = "";             //Text data to send to the server
 String receiveData = "";              //Text data received from the server
 unsigned int Actual_Millis, Previous_Millis;
+bool sprayNow, isSpraying = false;
+unsigned int sprayStartTime;
 
 
 
@@ -37,6 +40,7 @@ Mode currentMode = OFF;               //Current mode of the system
 
 //function definitions
 void goToDeepSleep();
+void sprayControl();
 
 void setup() {
   delay(10);
@@ -54,6 +58,7 @@ void setup() {
   Serial.println(WiFi.localIP());
   Actual_Millis = millis();               //Save time for refresh loop
   Previous_Millis = Actual_Millis; 
+  sprayStartTime = millis();
 
   setupTime();
 }
@@ -100,7 +105,8 @@ void loop() {
 
       Serial.print("Current mode: ");
       Serial.println(currentMode);
-      delay(15000);
+
+      sprayControl();
     }
 
   }
@@ -112,4 +118,25 @@ void goToDeepSleep(){
 
   esp_sleep_enable_timer_wakeup(SLEEP_TIME_US);
   esp_deep_sleep_start();
+}
+
+
+void sprayControl(){
+  if (sprayNow) {
+    isSpraying = true;
+    //digitalWrite(LED, HIGH);
+    sprayStartTime = millis();
+    sprayNow = false;
+  }
+
+  if (isSpraying) {
+    Serial.println("NOW SPRAYING");
+    if (millis() - sprayStartTime > SPRAY_TIME_MS) {
+      isSpraying = false;
+      
+      //digitalWrite(LED, LOW);
+    }
+  } else {
+    Serial.println("... not spraying ...");
+  }
 }

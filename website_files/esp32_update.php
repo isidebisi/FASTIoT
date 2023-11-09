@@ -50,7 +50,7 @@ if (isset($_POST['check_Operation_Mode'])) {
     $result   = mysqli_query($conn, $sql);
     $row  = mysqli_fetch_assoc($result);
     echo "Operation_Mode_is_".$row['status'];
-}	
+}
 
 //Update the database for Operation Mode
 if (isset($_POST['change_Operation_Mode'])) {
@@ -58,5 +58,5 @@ if (isset($_POST['change_Operation_Mode'])) {
     $new_mode = $_POST['new_mode'];
     $update = mysqli_query($conn, "UPDATE Operation_Mode SET status = '$new_mode' WHERE id = '$mode_id';");
     echo "Operation_Mode_is_now_".$new_mode;
-}	
+}
 ?>
