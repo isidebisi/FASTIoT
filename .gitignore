@@ -1,0 +1,34 @@
+
+# Ignore files related to Arduino development
+*.hex
+*.elf
+*.bin
+*.eep
+*.lss
+*.map
+*.o
+*.a
+*.d
+
+# Ignore files related to PHP development
+*.log
+*.sql
+*.sqlite
+
+
+# Ignore files related to Android development
+*.apk
+*.aab
+*.dex
+*.class
+*.log
+*.pro
+*.properties
+*.keystore
+*.jks
+*.json
+*.iml
+*.gradle
+*.idea
+
+.DS_Store
