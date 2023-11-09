@@ -12,7 +12,7 @@ void timerMode() {
 }
 
 void automaticMode() {
-    
+    //Test
 }
 
 void offMode() {
