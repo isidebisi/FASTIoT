@@ -9,12 +9,12 @@
 #define SLEEP_TIME_MS 1*1000                    //sleep time expressed in milli seconds
 #define SLEEP_TIME_US SLEEP_TIME_MS*1000        //sleep time expressed in micro seconds
 #define PUMP_PIN 16
-#define SPRAY_TIME_MS 30*1000       //how long we want to spray in milli seconds
+#define SPRAY_TIME_MS 15*1000       //how long we want to spray in milli seconds
 // PWM properties
 #define PWM_FREQUENCY 25000
 #define LED_CHANNEL 0
 #define PWM_RESOLUTION 8
-#define DUTYCYCLE 176
+#define DUTYCYCLE 160
 
 
 
@@ -70,7 +70,7 @@ void setup() {
   Actual_Millis = millis();               //Save time for refresh loop
   Previous_Millis = Actual_Millis; 
   sprayStartTime = millis();
-
+  ledcWrite( LED_CHANNEL , 0 );
   setupTime();
 }
 
@@ -91,11 +91,11 @@ void loop() {
       
       exchangeServer(&data_to_send, &receiveData);
       if(receiveData == "LED_is_off"){
-        ledcWrite( LED_CHANNEL , 0 );
+        //ledcWrite( LED_CHANNEL , 0 );
       }
       //If the received data is LED_is_on, we set HIGH the LED pin
       else if(receiveData == "LED_is_on"){
-        ledcWrite(LED_CHANNEL, DUTYCYCLE);
+        //ledcWrite(LED_CHANNEL, DUTYCYCLE);
       }
 
       data_to_send = "check_Operation_Mode=" + MODE_id;

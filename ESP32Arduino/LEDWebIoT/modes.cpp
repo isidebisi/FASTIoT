@@ -7,10 +7,17 @@
 #include <WiFiClient.h>
 #include <HTTPClient.h>
 #include "time.h"
+#include "serverCommunication.h"
 
 void manualMode( bool * sprayNow) {
     Serial.println("We will now spray... Manual Mode");
     *sprayNow = true;
+
+    //change mode back to OFF
+    String commandModeOff = "change_Operation_Mode=1&new_mode=0";
+    String commandResponse = "";
+    exchangeServer(&commandModeOff, &commandResponse);
+    Serial.println(commandResponse);
 }
 
 void timerMode( bool * sprayNow, unsigned int* lastSprayed) {
