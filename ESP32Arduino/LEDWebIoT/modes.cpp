@@ -6,17 +6,26 @@
 #include <ArduinoJson.h>
 #include <WiFiClient.h>
 #include <HTTPClient.h>
+#include "time.h"
 
-
-void manualMode() {
+void manualMode( bool * sprayNow) {
     Serial.println("We will now spray... Manual Mode");
+    *sprayNow = true;
 }
 
-void timerMode() {
+void timerMode( bool * sprayNow, unsigned int* lastSprayed) {
     Serial.println("We are in Timer Mode...");
+    String dayStamp;
+    unsigned int hour;
+    unsigned int minute;
+    unsigned int second;
+
+    getTime(&dayStamp, &hour, &minute, &second);
+
+    
 }
 
-void automaticMode() {
+void automaticMode( bool * sprayNow, unsigned int* lastSprayed) {
     std::vector<float> temperatures;
     std::vector<float> humidities;
     std::vector<String> dateTimeValues;
@@ -37,6 +46,7 @@ void automaticMode() {
         if (temp < threshold_temp && humidity > threshold_humidity) {
             Serial.println("Under " + String(threshold_temp) + "°C and over " + String(threshold_humidity) + "% humidity. Critial Weather detected at" + String(dateTimeValues[index]));
             Serial.println("We will now spray...");
+            *sprayNow = true;
             break; // Exit the loop since we found a temperature under the threshold
         }
     }
@@ -44,23 +54,23 @@ void automaticMode() {
 
 }
 
-void offMode() {
-    
+void offMode(bool * sprayNow) {
+    *sprayNow = false;
 }
 
-void executeMode(Mode mode) {
+void executeMode(Mode mode, bool * sprayNow, unsigned int* lastSprayed) {
     switch(mode) {
         case MANUAL:
-            manualMode();
+            manualMode(sprayNow);
             break;
         case TIMER:
-            timerMode();
+            timerMode(sprayNow, lastSprayed);
             break;
         case AUTOMATIC:
-            automaticMode();
+            automaticMode(sprayNow, lastSprayed);
             break;
         case OFF:
-            offMode();
+            offMode(sprayNow);
             break;
     }
 }

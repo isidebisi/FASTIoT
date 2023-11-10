@@ -24,10 +24,10 @@ enum Mode {
 */
 
 
-void offMode();
-void manualMode();
-void timerMode();
-void automaticMode();
-void executeMode(Mode mode);
+void offMode(bool * sprayNow);
+void manualMode(bool * sprayNow);
+void timerMode(bool * sprayNow, unsigned int* lastSprayed);
+void automaticMode(bool * sprayNow, unsigned int* lastSprayed);
+void executeMode(Mode mode, bool * sprayNow, unsigned int* lastSprayed);
 
 #endif // MODES_H

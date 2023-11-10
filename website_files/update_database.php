@@ -1,9 +1,9 @@
 <?php
 
 $servername = "localhost";
-$dBUsername = "id21525238_id21476219_ismaelfrei";
+$dBUsername = "id21476219_ismaelfrei";
 $dBPassword = "FASTIoT_2023";
-$dBName = "id21525238_id21476219_esp32";
+$dBName = "id21476219_esp32";
 
 $conn = mysqli_connect($servername, $dBUsername, $dBPassword, $dBName);
 
@@ -22,14 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mode = $_POST['mode'];
 
     if ($mode == 'AUTOMATIC') {
-        $update = mysqli_query($conn, "UPDATE AUTOMATIC SET status = 1 WHERE id = 1;");
+        $update = mysqli_query($conn, "UPDATE Operation_Mode SET status = 3 WHERE id = 1;");
+        
+        
         
     } else if ($mode == 'SPRAY_NOW') {
-        $update = mysqli_query($conn, "UPDATE Spray_Now SET status = 1 WHERE id = 1;");
+        $update = mysqli_query($conn, "UPDATE Operation_Mode SET status = 1 WHERE id = 1;");
+     
+        
 
     } else if ($mode == 'SCHEDULED') {
-        $update = mysqli_query($conn, "UPDATE SCHEDULED SET status = 1 WHERE id = 1;");
+        $update = mysqli_query($conn, "UPDATE Operation_Mode SET status = 2 WHERE id = 1;");
         
+
     } 
 
     // Perform database update using $mode value (you should have your database connection here)
@@ -69,5 +74,4 @@ $sql = "SELECT * FROM LED_status;";
 $result   = mysqli_query($conn, $sql);
 $row  = mysqli_fetch_assoc($result);
 ?>
-
 

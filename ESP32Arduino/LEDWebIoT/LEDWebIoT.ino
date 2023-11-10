@@ -30,7 +30,7 @@ String data_to_send = "";             //Text data to send to the server
 String receiveData = "";              //Text data received from the server
 unsigned int Actual_Millis, Previous_Millis;
 bool sprayNow, isSpraying = false;
-unsigned int sprayStartTime;
+unsigned int sprayStartTime, lastSprayed = 0;
 
 
 
@@ -112,7 +112,7 @@ void loop() {
           currentMode = AUTOMATIC;
       }
 
-      executeMode(currentMode);
+      executeMode(currentMode, &sprayNow, &lastSprayed);
 
       Serial.print("Current mode: ");
       Serial.println(currentMode);
@@ -133,15 +133,16 @@ void goToDeepSleep(){
 
 
 void sprayControl(){
-  if (sprayNow) {
+  if (sprayNow && isSpraying == false) {
     isSpraying = true;
     ledcWrite(LED_CHANNEL, DUTYCYCLE);
     sprayStartTime = millis();
     sprayNow = false;
   }
-
+  
   if (isSpraying) {
     Serial.println("NOW SPRAYING");
+    sprayNow = false;
     if (millis() - sprayStartTime > SPRAY_TIME_MS) {
       isSpraying = false;
       
