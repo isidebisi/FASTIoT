@@ -8,8 +8,15 @@
 
 #define SLEEP_TIME_MS 1*1000                    //sleep time expressed in milli seconds
 #define SLEEP_TIME_US SLEEP_TIME_MS*1000        //sleep time expressed in micro seconds
-#define LED_PIN 4
+#define PUMP_PIN 16
 #define SPRAY_TIME_MS 30*1000       //how long we want to spray in milli seconds
+// PWM properties
+#define PWM_FREQUENCY 25000
+#define LED_CHANNEL 0
+#define PWM_RESOLUTION 8
+#define DUTYCYCLE 176
+
+
 
 //Add WIFI data
 const char* ssid = "Ismael";              //Add your WIFI network name 
@@ -34,7 +41,7 @@ unsigned int second;
 
 
 //Inputs/outputs
-int LED = LED_PIN;                          //Connect LED on this pin (add 150ohm resistor)
+int LED = PUMP_PIN;                          //Connect LED on this pin (add 150ohm resistor)
 Mode currentMode = OFF;               //Current mode of the system
 
 
@@ -45,7 +52,11 @@ void sprayControl();
 void setup() {
   delay(10);
   Serial.begin(115200);                   //Start monitor
-  pinMode(LED, OUTPUT);                   //Set pin 2 as OUTPUT
+  pinMode(PUMP_PIN, OUTPUT);              //Set pin PUMP_PIN as OUTPUT
+
+    // PWM setup
+  ledcSetup( LED_CHANNEL , PWM_FREQUENCY , PWM_RESOLUTION );  // Set up PWM
+  ledcAttachPin( PUMP_PIN , LED_CHANNEL ) ;                   // Attach PWM to the LED pin
 
   WiFi.begin(ssid, password);             //Start wifi connection
   Serial.print("Connecting...");
@@ -80,12 +91,12 @@ void loop() {
       
       exchangeServer(&data_to_send, &receiveData);
       if(receiveData == "LED_is_off"){
-          digitalWrite(LED, LOW);
-        }
-        //If the received data is LED_is_on, we set HIGH the LED pin
-        else if(receiveData == "LED_is_on"){
-          digitalWrite(LED, HIGH);
-        }
+        ledcWrite( LED_CHANNEL , 0 );
+      }
+      //If the received data is LED_is_on, we set HIGH the LED pin
+      else if(receiveData == "LED_is_on"){
+        ledcWrite(LED_CHANNEL, DUTYCYCLE);
+      }
 
       data_to_send = "check_Operation_Mode=" + MODE_id;
       exchangeServer(&data_to_send, &receiveData);
@@ -124,7 +135,7 @@ void goToDeepSleep(){
 void sprayControl(){
   if (sprayNow) {
     isSpraying = true;
-    //digitalWrite(LED, HIGH);
+    ledcWrite(LED_CHANNEL, DUTYCYCLE);
     sprayStartTime = millis();
     sprayNow = false;
   }
@@ -134,7 +145,7 @@ void sprayControl(){
     if (millis() - sprayStartTime > SPRAY_TIME_MS) {
       isSpraying = false;
       
-      //digitalWrite(LED, LOW);
+      ledcWrite( LED_CHANNEL , 0 );
     }
   } else {
     Serial.println("... not spraying ...");
