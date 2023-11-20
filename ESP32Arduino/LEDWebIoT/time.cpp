@@ -26,7 +26,7 @@ void getTime(String* dayStamp, unsigned int* hour, unsigned int* minute, unsigne
   // 2018-05-28T16:00:13Z
   // We need to extract date and time
   formattedDate = timeClient.getFormattedDate();
-  Serial.println(formattedDate);
+  //Serial.println(formattedDate);
 
   // Extract date
   int splitT = formattedDate.indexOf("T");
@@ -35,18 +35,14 @@ void getTime(String* dayStamp, unsigned int* hour, unsigned int* minute, unsigne
   // Extract time
   timeStamp = formattedDate.substring(splitT+1, formattedDate.length()-1);
 
-  Serial.print("HOUR: ");
-  Serial.println(timeStamp);
-  Serial.print("DATE: ");
-  Serial.println(*dayStamp);
+
 
   int splitHour = timeStamp.indexOf(":");
   *hour = (timeStamp.substring(0,splitHour)).toInt();
   *minute = (timeStamp.substring(splitHour+1, splitHour+3)).toInt();
   *second = (timeStamp.substring(splitHour+4, splitHour+6)).toInt();
-  Serial.print("Extracted time is: ");
-  Serial.print(*hour);
-  Serial.print(" h ");
-  Serial.println(*minute);
+  Serial.print("Extracted Date and time is: " + *dayStamp + " ");
+  Serial.print((String)*hour + " h " + (String)*minute + " min " + (String)*second + " sec\n");
+
 
 }

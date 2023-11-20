@@ -3,6 +3,9 @@
 
 #include <HTTPClient.h>               //Download: https://electronoobs.com/eng_arduino_httpclient.php
 #include <Arduino.h>
+#include "definitions.h"
+
+
 
 
 // DEFINES
@@ -11,6 +14,7 @@
 
 //Function prototypes
 void exchangeServer(String* sendData, String* receiveData);
+bool sendServerMessage(ServerMessages message, ControlVariables* control);
 
 
 #endif // SERVERCOMMUNICATION_H

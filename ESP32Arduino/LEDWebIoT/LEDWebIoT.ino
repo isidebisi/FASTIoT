@@ -3,6 +3,7 @@
 #include <WiFi.h>                     //Download: https://electronoobs.com/eng_arduino_wifi.php
 
 #include "modes.h"
+#include "definitions.h"
 #include "time.h"
 #include "serverCommunication.h"
 
@@ -29,25 +30,21 @@ String MODE_id = "1";
 String data_to_send = "";             //Text data to send to the server
 String receiveData = "";              //Text data received from the server
 unsigned int Actual_Millis, Previous_Millis;
-bool sprayNow, isSpraying = false;
+
 unsigned int sprayStartTime, lastSprayed = 0;
-
-
-
-String dayStamp;
-unsigned int hour;
-unsigned int minute;
-unsigned int second;
+unsigned int updateServerCounter = 0;
 
 
 //Inputs/outputs
 int LED = PUMP_PIN;                          //Connect LED on this pin (add 150ohm resistor)
-Mode currentMode = OFF;               //Current mode of the system
 
+ControlVariables controls;
 
 //function definitions
 void goToDeepSleep();
 void sprayControl();
+void sendStatusToServer();
+
 
 void setup() {
   delay(10);
@@ -78,15 +75,25 @@ void setup() {
 void loop() {  
   //We make the refresh loop using millis() so we don't have to sue delay();
   Actual_Millis = millis();
+  
+
+  
   if(Actual_Millis - Previous_Millis > SLEEP_TIME_MS){
     Previous_Millis = Actual_Millis;  
 
-    //Get time
+    //sync server every 3 loops
+    if (updateServerCounter == 3) {
+      sendStatusToServer();
+      updateServerCounter = 0;
+    } else {
+      updateServerCounter++;
+    }
+    //test
+    //Serial.println("Test message loop");
     
-    getTime(&dayStamp, &hour, &minute, &second);
 
     if(WiFi.status()== WL_CONNECTED){                   //Check WiFi connection status  
-
+      /*
       data_to_send = "check_LED_status=" + LED_id;      //send text: "check_LED_status"
       
       exchangeServer(&data_to_send, &receiveData);
@@ -97,25 +104,21 @@ void loop() {
       else if(receiveData == "LED_is_on"){
         //ledcWrite(LED_CHANNEL, DUTYCYCLE);
       }
+      */
 
-      data_to_send = "check_Operation_Mode=" + MODE_id;
-      exchangeServer(&data_to_send, &receiveData);
+      //test
+      sendServerMessage(ReadTimeOfSpray, &controls);
+      
+      //Get time
+      getTime(&controls.dayStamp, &controls.hour, &controls.minute, &controls.second);
 
-      //String receiveData = "Operation_Mode_is_3";
-      if (receiveData == "Operation_Mode_is_0") {
-          currentMode = OFF;
-      } else if (receiveData == "Operation_Mode_is_1") {
-          currentMode = MANUAL;
-      } else if (receiveData == "Operation_Mode_is_2") {
-          currentMode = TIMER;
-      } else if (receiveData == "Operation_Mode_is_3") {
-          currentMode = AUTOMATIC;
-      }
+      sendServerMessage(ReadOperationMode, &controls);
 
-      executeMode(currentMode, &sprayNow, &lastSprayed);
+
+      executeMode(controls.currentMode, &controls.sprayNow, &lastSprayed);
 
       Serial.print("Current mode: ");
-      Serial.println(currentMode);
+      Serial.println(controls.currentMode);
 
       sprayControl();
     }
@@ -133,22 +136,32 @@ void goToDeepSleep(){
 
 
 void sprayControl(){
-  if (sprayNow && isSpraying == false) {
-    isSpraying = true;
+  if (controls.sprayNow && controls.isSpraying == false) {
+    controls.isSpraying = true;
     ledcWrite(LED_CHANNEL, DUTYCYCLE);
     sprayStartTime = millis();
-    sprayNow = false;
+    controls.sprayNow = false;
   }
   
-  if (isSpraying) {
+  if (controls.isSpraying) {
     Serial.println("NOW SPRAYING");
-    sprayNow = false;
+    controls.sprayNow = false;
     if (millis() - sprayStartTime > SPRAY_TIME_MS) {
-      isSpraying = false;
+      controls.isSpraying = false;
       
       ledcWrite( LED_CHANNEL , 0 );
     }
   } else {
     Serial.println("... not spraying ...");
+  }
+}
+
+void sendStatusToServer(){
+  for (int i = 0; i < WriteWaterTankLevel; i++) {
+    if (sendServerMessage((ServerMessages)i, &controls)) {
+      break;
+    } else {
+      Serial.print("Error at sending Message to server: " + String(i));
+    }
   }
 }

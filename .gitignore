@@ -34,3 +34,4 @@
 .DS_Store
 
 ESP32Arduino/LEDWebIoT/libraries
+.VSCode/

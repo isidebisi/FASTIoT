@@ -2,15 +2,11 @@
 #define MODES_H
 
 #include <Arduino.h>
+#include "definitions.h"
 
 #define SPRAY_TIME_MS 15*1000     //how long we want to spray in milli seconds
 
-enum Mode {
-    OFF = 0,
-    MANUAL = 1,
-    TIMER = 2,
-    AUTOMATIC = 3,
-};
+
 
 
 /*
