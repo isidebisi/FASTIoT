@@ -38,16 +38,14 @@ void exchangeServer(String* sendData, String* receiveData) {
     Serial.println(response_code);
   }
   http.end();
-  Serial.println("End of exchangeServer");
 }
 
 
 bool sendServerMessage(ServerMessages message, ControlVariables* control) {
   String sendData;
   String receiveData;
-  String dataString, hourString, minuteString, secondString;
+  String dataString, hourString, minuteString, secondString, expectedResponse;
   bool success = false;
-
   Serial.println("Sending server message called with parameter : " + String(message));
 
   switch(message) {
@@ -68,8 +66,9 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
 
     case ServerMessages::WriteIsSpraying:
       sendData = "wIS=1&newVal=" + String(control->isSpraying);
+      expectedResponse = "IS" + String(control->isSpraying);
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "IS" + String(control->isSpraying)) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteLastOnline:
@@ -79,8 +78,9 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
 
       dataString = String(control->dayStamp.substring(2)) + " at " + hourString + ":" + minuteString + ":" + secondString;
       sendData = "wLO=1&newVal=" + dataString;
+      expectedResponse = "LO" + dataString;
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "LO" + dataString) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteLastSprayed:
@@ -90,8 +90,9 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       dataString = String(control->lastSprayedDayStamp.substring(2)) + " at " + hourString + ":" + minuteString + ":" + secondString;
 
       sendData = "wLS=1&newVal=" + dataString;
+      expectedResponse = "LS" + dataString;
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "LS" + dataString) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteNextSpray:
@@ -101,32 +102,37 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       dataString = String(control->nextSprayDayStamp.substring(2)) + " at " + hourString + ":" + minuteString + ":" + secondString;
 
       sendData = "wNS=1&newVal=" + ((control->nextSprayHour <= 23) ?  dataString : "No spraying scheduled ");
+      expectedResponse = "NS" + ((control->nextSprayHour <= 23) ?  dataString : "No spraying scheduled ");
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "NS" + dataString) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteOperationMode:
       sendData = "wOM=1&newVal=" + String(control->currentMode);
+      expectedResponse = "OM" + String(control->currentMode);
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "OM" + String(control->currentMode)) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteSaltConcentration:
       sendData = "wSC=1&newVal=" + String(control->saltConcentration);
+      expectedResponse = "SC" + String(control->saltConcentration);
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "SC" + String(control->saltConcentration)) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteSaltLevel:
       sendData = "wSL=1&newVal=" + String(control->saltLevel);
+      expectedResponse = "SL" + String(control->saltLevel);
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "SL" + String(control->saltLevel)) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteWaterTankLevel:
-      sendData = "wWL=1&newVal=" + String(control->waterTankLevel);
+      sendData = "wWTL=1&newVal=" + String(control->waterTankLevel);
+      expectedResponse = "WTL" + String(control->waterTankLevel);
       exchangeServer(&sendData, &receiveData);
-      success = (receiveData == "WL" + String(control->waterTankLevel)) ? true : false;
+      success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     default:

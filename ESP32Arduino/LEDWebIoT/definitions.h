@@ -2,6 +2,8 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#define TIMENOTSET 61
+
 //ENUMS
 
 enum Mode {
@@ -43,27 +45,27 @@ struct ControlVariables {
   bool isSpraying = false;
   
   //TIME
-  String dayStamp;
+  String dayStamp = "datanotset";
   unsigned int hour;
   unsigned int minute;
   unsigned int second;
 
   //Scheduled Spray
-  unsigned int scheduledSprayHour;
-  unsigned int scheduledSprayMinute;
-  unsigned int scheduledSpraySecond;
+  unsigned int scheduledSprayHour = TIMENOTSET;
+  unsigned int scheduledSprayMinute = TIMENOTSET;
+  unsigned int scheduledSpraySecond = TIMENOTSET;
 
   //lastSprayed
-  String lastSprayedDayStamp;
-  unsigned int lastSprayedHour;
-  unsigned int lastSprayedMinute;
-  unsigned int lastSprayedSecond;
+  String lastSprayedDayStamp = "datanotset";
+  unsigned int lastSprayedHour = TIMENOTSET;
+  unsigned int lastSprayedMinute = TIMENOTSET;
+  unsigned int lastSprayedSecond = TIMENOTSET;
 
   //nextSpray
-  String nextSprayDayStamp;
-  unsigned int nextSprayHour;
-  unsigned int nextSprayMinute;
-  unsigned int nextSpraySecond;
+  String nextSprayDayStamp = "datanotset";
+  unsigned int nextSprayHour = TIMENOTSET;
+  unsigned int nextSprayMinute = TIMENOTSET;
+  unsigned int nextSpraySecond = TIMENOTSET;
 
   //location
   double latitude;

@@ -32,7 +32,7 @@ String receiveData = "";              //Text data received from the server
 unsigned int Actual_Millis, Previous_Millis;
 
 unsigned int sprayStartTime, lastSprayed = 0;
-unsigned int updateServerCounter = 0;
+unsigned int updateServerCounter = 2;
 
 
 //Inputs/outputs
@@ -128,7 +128,7 @@ void loop() {
 }
 
 void goToDeepSleep(){
-  Serial.print("Going to deep sleep . . .");
+  Serial.println("Going to deep sleep . . .");
 
   esp_sleep_enable_timer_wakeup(SLEEP_TIME_US);
   esp_deep_sleep_start();
@@ -157,11 +157,10 @@ void sprayControl(){
 }
 
 void sendStatusToServer(){
-  for (int i = 0; i < WriteWaterTankLevel; i++) {
-    if (sendServerMessage((ServerMessages)i, &controls)) {
-      break;
-    } else {
-      Serial.print("Error at sending Message to server: " + String(i));
-    }
+  Serial.println("*****UPDATING SERVER *****");  
+  bool success = false;
+  for (int i = 0; i <= (int) WriteWaterTankLevel; i++) {
+    success = sendServerMessage((ServerMessages)i, &controls);
+    if(!success) Serial.print("*** ERROR at sending Message to server: " + String(i) + "\n\n");
   }
 }

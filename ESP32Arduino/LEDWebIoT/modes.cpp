@@ -14,7 +14,7 @@ void manualMode( bool * sprayNow) {
     *sprayNow = true;
 
     //change mode back to OFF
-    String commandModeOff = "cOM=1&newVal=0";
+    String commandModeOff = "wOM=1&newVal=0";
     String commandResponse = "";
     exchangeServer(&commandModeOff, &commandResponse);
     Serial.println(commandResponse);
