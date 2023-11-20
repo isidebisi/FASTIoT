@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         
         
-    } else if ($mode == 'SPRAY_NOW') {
+    } else if ($mode == 'Is_Spraying') {
         $update = mysqli_query($conn, "UPDATE Operation_Mode SET status = 1 WHERE id = 1;");
      
         
