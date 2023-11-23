@@ -76,7 +76,7 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       minuteString = (control->minute >= 10) ? String(control->minute) : "0" + String(control->minute);
       secondString = (control->second >= 10) ? String(control->second) : "0" + String(control->second);
 
-      dataString = String(control->dayStamp.substring(2)) + " at " + hourString + ":" + minuteString + ":" + secondString;
+      dataString = String(control->DayStamp) + " at " + hourString + ":" + minuteString + ":" + secondString;
       sendData = "wLO=1&newVal=" + dataString;
       expectedResponse = "LO" + dataString;
       exchangeServer(&sendData, &receiveData);
@@ -87,7 +87,7 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       hourString = (control->lastSprayedHour >= 10) ? String(control->lastSprayedHour) : "0" + String(control->lastSprayedHour);
       minuteString = (control->lastSprayedMinute >= 10) ? String(control->lastSprayedMinute) : "0" + String(control->lastSprayedMinute);
       secondString = (control->lastSprayedSecond >= 10) ? String(control->lastSprayedSecond) : "0" + String(control->lastSprayedSecond);
-      dataString = String(control->lastSprayedDayStamp.substring(2)) + " at " + hourString + ":" + minuteString + ":" + secondString;
+      dataString = String(control->lastSprayedDayStamp) + " at " + hourString + ":" + minuteString + ":" + secondString;
 
       sendData = "wLS=1&newVal=" + dataString;
       expectedResponse = "LS" + dataString;
@@ -99,7 +99,7 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       hourString = (control->nextSprayHour >= 10) ? String(control->nextSprayHour) : "0" + String(control->nextSprayHour);
       minuteString = (control->nextSprayMinute >= 10) ? String(control->nextSprayMinute) : "0" + String(control->nextSprayMinute);
       secondString = (control->nextSpraySecond >= 10) ? String(control->nextSpraySecond) : "0" + String(control->nextSpraySecond);
-      dataString = String(control->nextSprayDayStamp.substring(2)) + " at " + hourString + ":" + minuteString + ":" + secondString;
+      dataString = String(control->nextSprayDayStamp) + " at " + hourString + ":" + minuteString + ":" + secondString;
 
       sendData = "wNS=1&newVal=" + ((control->nextSprayHour <= 23) ?  dataString : "No spraying scheduled ");
       expectedResponse = "NS" + ((control->nextSprayHour <= 23) ?  dataString : "No spraying scheduled ");
