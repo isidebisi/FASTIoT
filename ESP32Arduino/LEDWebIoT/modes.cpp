@@ -9,9 +9,9 @@
 #include "time.h"
 #include "serverCommunication.h"
 
-void manualMode( bool * sprayNow) {
+void manualMode(ControlVariables* controls) {
     Serial.println("We will now spray... Manual Mode");
-    *sprayNow = true;
+    controls->sprayNow = true;
 
     //change mode back to OFF
     String commandModeOff = "wOM=1&newVal=0";
@@ -20,7 +20,7 @@ void manualMode( bool * sprayNow) {
     Serial.println(commandResponse);
 }
 
-void timerMode( bool * sprayNow, unsigned int* lastSprayed) {
+void timerMode(ControlVariables* controls) {
     Serial.println("We are in Timer Mode...");
     String dayStamp;
     unsigned int hour;
@@ -32,7 +32,7 @@ void timerMode( bool * sprayNow, unsigned int* lastSprayed) {
     
 }
 
-void automaticMode( bool * sprayNow, unsigned int* lastSprayed) {
+void automaticMode(ControlVariables* controls) {
     std::vector<float> temperatures;
     std::vector<float> humidities;
     std::vector<String> dateTimeValues;
@@ -53,7 +53,7 @@ void automaticMode( bool * sprayNow, unsigned int* lastSprayed) {
         if (temp < threshold_temp && humidity > threshold_humidity) {
             Serial.println("Under " + String(threshold_temp) + "°C and over " + String(threshold_humidity) + "% humidity. Critial Weather detected at" + String(dateTimeValues[index]));
             Serial.println("We will now spray...");
-            *sprayNow = true;
+            controls->sprayNow = true;
             break; // Exit the loop since we found a temperature under the threshold
         }
     }
@@ -61,23 +61,23 @@ void automaticMode( bool * sprayNow, unsigned int* lastSprayed) {
 
 }
 
-void offMode(bool * sprayNow) {
-    *sprayNow = false;
+void offMode(ControlVariables* controls) {
+    controls->sprayNow = false;
 }
 
-void executeMode(Mode mode, bool * sprayNow, unsigned int* lastSprayed) {
+void executeMode(Mode mode, ControlVariables* controls) {
     switch(mode) {
         case MANUAL:
-            manualMode(sprayNow);
+            manualMode(controls);
             break;
         case TIMER:
-            timerMode(sprayNow, lastSprayed);
+            timerMode(controls);
             break;
         case AUTOMATIC:
-            automaticMode(sprayNow, lastSprayed);
+            automaticMode(controls);
             break;
         case OFF:
-            offMode(sprayNow);
+            offMode(controls);
             break;
     }
 }

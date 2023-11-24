@@ -53,6 +53,15 @@ if (isset($_POST['wLS'])) {
 	echo "LS" . $newVal;
 }
 
+// Read the database for Next_Spray
+if (isset($_POST['rNS'])) {
+	$mode_id = $_POST['rNS'];
+	$sql = "SELECT * FROM Operation_Mode WHERE id = '$mode_id';";
+	$result = mysqli_query($conn, $sql);
+	$row = mysqli_fetch_assoc($result);
+	echo "NS" . $row['status'];
+}
+
 // Write to the database for Next_spray
 if (isset($_POST['wNS'])) {
 	$spray_id = $_POST['wNS'];

@@ -21,8 +21,8 @@ enum TankLevel {
 };
 
 enum ServerMessages {
-    ReadTimeOfSpray,
     ReadOperationMode,
+    ReadNextSpray,
     WriteIsSpraying,
     WriteLastOnline,
     WriteLastSprayed,
@@ -51,21 +51,22 @@ struct ControlVariables {
   unsigned int second;
 
   //Scheduled Spray
-  unsigned int scheduledSprayHour = TIMENOTSET;
-  unsigned int scheduledSprayMinute = TIMENOTSET;
-  unsigned int scheduledSpraySecond = TIMENOTSET;
+  unsigned int scheduledSprayHour[3] = {TIMENOTSET};
+  unsigned int scheduledSprayMinute[3] = {TIMENOTSET};
 
   //lastSprayed
   String lastSprayedDayStamp = "datanotset";
   unsigned int lastSprayedHour = TIMENOTSET;
   unsigned int lastSprayedMinute = TIMENOTSET;
   unsigned int lastSprayedSecond = TIMENOTSET;
+  String lastSprayedString = "datanotset";
 
   //nextSpray
   String nextSprayDayStamp = "datanotset";
   unsigned int nextSprayHour = TIMENOTSET;
   unsigned int nextSprayMinute = TIMENOTSET;
   unsigned int nextSpraySecond = TIMENOTSET;
+
 
   //location
   double latitude;

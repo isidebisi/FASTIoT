@@ -46,22 +46,32 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
   String receiveData;
   String dataString, hourString, minuteString, secondString, expectedResponse;
   bool success = false;
+  unsigned int iter = 0;
   Serial.println("Sending server message called with parameter : " + String(message));
 
   switch(message) {
-    //TODO: Assemble messages
-    case ServerMessages::ReadTimeOfSpray:
-      sendData = "rToS=1";
-      exchangeServer(&sendData, &receiveData);
-      control->scheduledSprayHour = (unsigned int)receiveData.substring(3).toInt();
-      success = true;
-      break;
 
     case ServerMessages::ReadOperationMode:
       sendData = "rOM=1";
       exchangeServer(&sendData, &receiveData);
       control->currentMode = (Mode)receiveData.substring(2).toInt();
       success = true;
+      break;
+
+    case ServerMessages::ReadNextSpray:
+      sendData = "rNS=1";
+      exchangeServer(&sendData, &receiveData);
+      for(int i = 0; i < 3; i++) {
+        control->scheduledSprayHour[i] = TIMENOTSET;
+        control->scheduledSprayHour[i] = TIMENOTSET;
+      }
+      while (receiveData.indexOf(":") != -1) {
+        control->scheduledSprayHour[iter] = receiveData.substring(receiveData.indexOf(":")-2, receiveData.indexOf(":")).toInt();
+        control->scheduledSprayHour[iter] = receiveData.substring(receiveData.indexOf(":")+1, receiveData.indexOf(":")+3).toInt();
+        receiveData = receiveData.substring(receiveData.indexOf(":")+4);
+        iter++;
+      }
+      
       break;
 
     case ServerMessages::WriteIsSpraying:
@@ -76,7 +86,7 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       minuteString = (control->minute >= 10) ? String(control->minute) : "0" + String(control->minute);
       secondString = (control->second >= 10) ? String(control->second) : "0" + String(control->second);
 
-      dataString = String(control->DayStamp) + " at " + hourString + ":" + minuteString + ":" + secondString;
+      dataString = String(control->dayStamp) + " at " + hourString + ":" + minuteString + ":" + secondString;
       sendData = "wLO=1&newVal=" + dataString;
       expectedResponse = "LO" + dataString;
       exchangeServer(&sendData, &receiveData);
@@ -84,18 +94,15 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
       break;
 
     case ServerMessages::WriteLastSprayed:
-      hourString = (control->lastSprayedHour >= 10) ? String(control->lastSprayedHour) : "0" + String(control->lastSprayedHour);
-      minuteString = (control->lastSprayedMinute >= 10) ? String(control->lastSprayedMinute) : "0" + String(control->lastSprayedMinute);
-      secondString = (control->lastSprayedSecond >= 10) ? String(control->lastSprayedSecond) : "0" + String(control->lastSprayedSecond);
-      dataString = String(control->lastSprayedDayStamp) + " at " + hourString + ":" + minuteString + ":" + secondString;
-
-      sendData = "wLS=1&newVal=" + dataString;
-      expectedResponse = "LS" + dataString;
+    
+      sendData = "wLS=1&newVal=" + control->lastSprayedString;
+      expectedResponse = "LS" + control->lastSprayedString;
       exchangeServer(&sendData, &receiveData);
       success = (receiveData.substring(0, expectedResponse.length()) == expectedResponse);
       break;
 
     case ServerMessages::WriteNextSpray:
+    
       hourString = (control->nextSprayHour >= 10) ? String(control->nextSprayHour) : "0" + String(control->nextSprayHour);
       minuteString = (control->nextSprayMinute >= 10) ? String(control->nextSprayMinute) : "0" + String(control->nextSprayMinute);
       secondString = (control->nextSpraySecond >= 10) ? String(control->nextSpraySecond) : "0" + String(control->nextSpraySecond);

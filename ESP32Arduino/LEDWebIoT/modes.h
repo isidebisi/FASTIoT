@@ -20,10 +20,10 @@
 */
 
 
-void offMode(bool * sprayNow);
-void manualMode(bool * sprayNow);
-void timerMode(bool * sprayNow, unsigned int* lastSprayed);
-void automaticMode(bool * sprayNow, unsigned int* lastSprayed);
-void executeMode(Mode mode, bool * sprayNow, unsigned int* lastSprayed);
+void offMode(ControlVariables* controls);
+void manualMode(ControlVariables* controls);
+void timerMode(ControlVariables* controls);
+void automaticMode(ControlVariables* controls);
+void executeMode(Mode mode, ControlVariables* controls);
 
 #endif // MODES_H

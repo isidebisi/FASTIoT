@@ -1,0 +1,231 @@
+.frame {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.frame .div {
+  background-color: #ffffff;
+  width: 1046px;
+  height: 1424px;
+  position: relative;
+}
+
+.frame .overlap {
+  position: absolute;
+  width: 999px;
+  height: 650px;
+  top: 219px;
+  left: 21px;
+  background-color: #ffffff;
+  border-radius: 48px;
+  border: 3px solid;
+  border-color: #091133;
+}
+
+.frame .PROBLEMS-WATER-TANK {
+  position: absolute;
+  width: 903px;
+  top: 39px;
+  left: 38px;
+  font-family: "Noto Serif";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 30px;
+}
+
+.frame .overlap-group {
+  position: absolute;
+  width: 133px;
+  height: 35px;
+  top: 17px;
+  left: 21px;
+}
+
+.frame .text-wrapper {
+  position: absolute;
+  width: 96px;
+  top: 0;
+  left: 0;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.frame .text-wrapper-2 {
+  position: absolute;
+  top: 0;
+  left: 58px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.frame .text-wrapper-3 {
+  position: absolute;
+  width: 96px;
+  top: 17px;
+  left: 174px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.frame .title {
+  position: absolute;
+  width: 539px;
+  top: 109px;
+  left: 254px;
+  font-family: "Noto Serif";
+  font-weight: 700;
+  color: var(--colourmainblue-900);
+  font-size: 50px;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 66px;
+}
+
+.frame .div-wrapper {
+  position: absolute;
+  width: 239px;
+  height: 31px;
+  top: 939px;
+  left: 79px;
+  background-color: #111b47;
+}
+
+.frame .text-wrapper-4 {
+  position: absolute;
+  width: 130px;
+  top: 2px;
+  left: 54px;
+  font-family: "Noto Serif";
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 26px;
+  white-space: nowrap;
+}
+
+.frame .overlap-2 {
+  position: absolute;
+  width: 239px;
+  height: 31px;
+  top: 942px;
+  left: 743px;
+  background-color: #111b47;
+}
+
+.frame .overlap-3 {
+  position: absolute;
+  width: 239px;
+  height: 31px;
+  top: 1091px;
+  left: 404px;
+  background-color: #111b47;
+}
+
+.frame .p {
+  position: absolute;
+  width: 205px;
+  top: 1146px;
+  left: 421px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 20px;
+}
+
+.frame .text-wrapper-5 {
+  top: 991px;
+  left: 96px;
+  position: absolute;
+  width: 205px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 20px;
+}
+
+.frame .text-wrapper-6 {
+  top: 994px;
+  left: 760px;
+  position: absolute;
+  width: 205px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 20px;
+}
+
+.problems-text {
+  font-family: "Noto Serif"; /* Replace 'YourPreferredFont' with the desired font family */
+  font-size: 24px; /* Adjust the font size as needed */
+  font-weight: bold; /* Adjust the font weight as needed */
+  color: #ff0000; /* Adjust the color as needed */
+  /* Add any other styling you want */
+}
+
+/* Add the following CSS to your existing stylesheet */
+
+/* Texture for the buttons */
+.div-wrapper,
+.overlap-2,
+.overlap-3 {
+  background-color: #4CAF50; /* Button background color */
+  border: 1px solid #45a049; /* Button border color */
+  color: white; /* Button text color */
+  padding: 10px 20px; /* Button padding */
+  text-align: center; /* Center text in the button */
+  text-decoration: none; /* Remove underline from text */
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+/* Add texture to the buttons on hover */
+.div-wrapper:hover,
+.overlap-2:hover,
+.overlap-3:hover {
+  background-color: #45a049; /* Darker background color on hover */
+}
+
+/* Add a subtle shadow to the buttons */
+.div-wrapper,
+.overlap-2,
+.overlap-3 {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+}
+
+.changing-text {
+  color: green; /* Change text color to indicate an update */
+  font-weight: bold; /* Emphasize the text */
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Transition the color and font-weight changes */
+}

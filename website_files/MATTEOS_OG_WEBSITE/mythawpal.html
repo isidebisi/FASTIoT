@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="static_mythawpal/globals.css" />
+    <link rel="stylesheet" href="static_mythawpal/styleguide.css" />
+    <link rel="stylesheet" href="static_mythawpal/style.css" />
+  </head>
+  <body>
+    <div class="frame">
+      <div class="div">
+        <div class="overlap">
+          <p class="PROBLEMS-WATER-TANK">
+            PROBLEMS: <span id="problemsText" class="problems-text"></span><br /><br />WATER TANK: <span id="tanklevel" class="problems-text"></span><br /><br />SOLUTION: <span id="solution" class="problems-text"></span><br /><br />SALT TANK: <span id="salttank" class="problems-text"></span><br /><br />IN USE: <span id="inuse" class="problems-text"></span><br /><br />NEXT
+            USE: <span id="nextuse" class="problems-text"></span><br /><br />CURRENT MODE: <span id="currentMode" class="problems-text"></span><br /><br />LOCATION: <span id="location" class="problems-text"></span> <br /><br />RISK OF ICE: <span id="riskIce" class="problems-text"></span><br /><br />LAST UPDATED: <span id="lastUpdated" class="problems-text"></span>
+          </p>
+        </div>
+        <div class="overlap-group">
+          <div class="text-wrapper" id="home">Home</div>
+          <div class="text-wrapper-2" id="myThawpal">My ThawPal</div>
+        </div>
+        <div class="text-wrapper-3">Free Quote</div>
+        <div class="title">My ThawPal</div>
+        <div class="div-wrapper" id="sprayNowButton"><div class="text-wrapper-4">SPRAY NOW</div></div>
+        <div class="overlap-2" id="scheduledButton"><div class="text-wrapper-4">SCHEDULED</div></div>
+        <div class="overlap-3" id="automaticButton"><div class="text-wrapper-4">AUTOMATIC</div></div>
+        <p class="p">
+            
+          Enabling this mode will let the device communicate with MeteoSuisse and its sensors. It will assure that no
+          ice can form on the road by activating the spraying when a dangerous situation is sensed.
+        </p>
+        <p class="text-wrapper-5">
+          Enabling this mode will spray immediately the deicing solution. The previous mode is use will be disabled.
+          Please assure you that no one is currently in the spraying range and do not forget to enable a mode after the
+          spraying.
+        </p>
+        <p class="text-wrapper-6">
+          Enabling this mode will let you schedule the use of the device. This link will forward you to a new page where
+          the settings need to be set and the mode activated.
+        </p>
+      </div>
+    </div>
+    <script>
+    
+      
+        
+      
+        
+            
+        function updateProblemsText(problems) {
+            const problemsText = document.getElementById('problemsText');
+            problemsText.textContent = problems;
+        }
+        
+        function updateWaterText(problems) {
+            const problemsText = document.getElementById('tanklevel');
+            problemsText.textContent = problems;
+        }
+
+        function updateModeText(problems) {
+            const problemsText = document.getElementById('currentMode');
+            problemsText.textContent = problems;
+        }
+        function updateSolutionText(problems) {
+            const problemsText = document.getElementById('solution');
+            problemsText.textContent = problems;
+        }
+
+        function updateNextUseText(problems) {
+            const problemsText = document.getElementById('nextuse');
+            problemsText.textContent = problems;
+        }
+
+        function updateRiskIceText(problems) {
+            const problemsText = document.getElementById('riskIce');
+            problemsText.textContent = problems;
+        }
+
+        function updateSaltTankText(problems) {
+            const problemsText = document.getElementById('salttank');
+            problemsText.textContent = problems;
+        }
+
+        function updateInUseText(problems) {
+            const problemsText = document.getElementById('inuse');
+            problemsText.textContent = problems;
+        }
+
+        function updateLocation(problems) {
+            const problemsText = document.getElementById('location');
+            problemsText.textContent = problems;
+        }
+        
+        function updateLastUpdated() {
+            const lastUpdatedElement = document.getElementById('lastUpdated');
+            const currentDateTime = new Date();
+            const formattedDateTime = currentDateTime.toLocaleString(); // Adjust the format as needed
+            lastUpdatedElement.textContent = formattedDateTime;
+        }
+
+        let previousRiskValue = null;
+        
+        function fetchDataAndUpdate() {
+            // Fetch problems data
+            fetch('utils/get_problems.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update problems text based on data from PHP
+                    updateProblemsText(data.mode);
+                })
+                .catch(error => console.error('Error fetching problems data:', error));
+        
+            // Fetch water tank data
+            fetch('utils/get_water_tank.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update water tank text based on data from PHP
+                    updateWaterText(data.mode);
+                })
+                .catch(error => console.error('Error fetching water tank data:', error));
+        
+            // Update last updated datetime
+
+            fetch('utils/get_current_mode.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update water tank text based on data from PHP
+                    updateModeText(data.mode);
+                })
+                .catch(error => console.error('Error fetching current mode data:', error));
+
+            fetch('utils/get_solution.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update water tank text based on data from PHP
+                    updateSolutionText(data.mode);
+                })
+                .catch(error => console.error('Error fetching current mode data:', error));
+
+            fetch('utils/get_next_spray.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update water tank text based on data from PHP
+                    updateNextUseText(data.mode);
+                })
+                .catch(error => console.error('Error fetching current mode data:', error));
+
+
+            fetch('utils/get_location.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Debugging statement to check the data received from PHP
+                    console.log("Data from PHP:", data);
+            
+                    // Update water tank text based on data from PHP
+                    updateLocation(data.location);
+                })
+                .catch(error => console.error('Error fetching location data:', error));
+            
+
+            fetch('utils/get_risk_ice.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update risk of ice text based on data from PHP
+                    updateRiskIceText(data.mode);
+        
+                    console.log("Current Risk Value:", data.mode);
+                    console.log("Previous Risk Value:", previousRiskValue);
+
+                    if (parseFloat(data.mode) > 80 && data.mode !== previousRiskValue) {
+                        console.log("Triggering Notification");
+                        showNotification("High Risk of Ice", "The risk of ice is higher than 80%.");
+                    }
+        
+                    // Update previous risk value
+                    previousRiskValue = data.mode;
+                })
+                .catch(error => console.error('Error fetching risk of ice data:', error));
+        
+            fetch('utils/get_salt_tank.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update water tank text based on data from PHP
+                    updateSaltTankText(data.mode);
+                })
+                .catch(error => console.error('Error fetching current mode data:', error));
+            
+            fetch('utils/get_in_use.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Update water tank text based on data from PHP
+                    updateInUseText(data.mode);
+                })
+                .catch(error => console.error('Error fetching current mode data:', error));
+
+            
+            
+        
+            updateLastUpdated();
+        }
+        
+        // Initial fetch and update
+        fetchDataAndUpdate();
+        
+        // Set up periodic updates (every 5 seconds in this example)
+        const updateInterval = 5000; // in milliseconds
+        setInterval(fetchDataAndUpdate, updateInterval);
+
+
+            // Event listeners for the mode buttons
+        document.getElementById('sprayNowButton').addEventListener('click', function() {
+            updateDatabase('SPRAY NOW');
+        });
+
+        document.getElementById('scheduledButton').addEventListener('click', function() {
+            window.location.href = 'schedule.html';
+        });
+
+        document.getElementById('automaticButton').addEventListener('click', function() {
+            updateDatabase('AUTOMATIC');
+        });
+
+        function updateInUseDatabase() {
+            // Send an AJAX request to update the database
+            fetch('utils/update_in_use.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    mode: 1,
+                }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Database updated successfully:', data);
+            })
+            .catch(error => console.error('Error updating database:', error));
+        }
+
+        function updateDatabase(mode) {
+            // Send an AJAX request to update the database
+            fetch('utils/update_database.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                mode: mode,
+            }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Database updated successfully:', data);
+                // Update the "CURRENT MODE:" in the HTML
+                const currentModeElement = document.getElementById('currentMode');
+                currentModeElement.textContent = mode;
+                currentModeElement.classList.add('changing-text');
+                setTimeout(() => {
+                    currentModeElement.classList.remove('changing-text');
+            }, 1000);
+            })
+            .catch(error => console.error('Error updating database:', error));
+        }
+
+        function showNotification(title, message) {
+            // Check if the browser supports notifications
+            if (!("Notification" in window)) {
+                console.error("This browser does not support desktop notifications");
+                return;
+            }
+        
+            // Check if the user has granted permission to show notifications
+            if (Notification.permission === "granted") {
+                // If granted, create a notification
+                new Notification(title, { body: message });
+            } else if (Notification.permission !== "denied") {
+                // If not denied, request permission from the user
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        // If permission is granted, create a notification
+                        new Notification(title, { body: message });
+                    }
+                });
+            }
+        }
+      
+
+        const thawpalButton = document.getElementById('myThawpal');
+        const homeButton = document.getElementById('home');
+        
+      
+        
+      
+        homeButton.addEventListener('click', function () {
+          window.location.href = 'index.html';
+        });
+        homeButton.style.cursor = 'pointer';
+      
+        thawpalButton.addEventListener('click', function () {
+          window.location.href = 'MyThawPal.html';
+        });
+        thawpalButton.style.cursor = 'pointer';
+      </script>
+  </body>
+</html>

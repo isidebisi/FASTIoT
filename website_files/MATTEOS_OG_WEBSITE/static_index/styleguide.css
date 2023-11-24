@@ -1,0 +1,10 @@
+:root {
+  --colourmainblue-900: rgba(9, 17, 51, 1);
+  --colourmainblue-400: rgba(111, 124, 178, 1);
+  --regular-14-font-family: "Roboto-Regular", Helvetica;
+  --regular-14-font-weight: 400;
+  --regular-14-font-size: 14px;
+  --regular-14-letter-spacing: 0px;
+  --regular-14-line-height: 24px;
+  --regular-14-font-style: normal;
+}

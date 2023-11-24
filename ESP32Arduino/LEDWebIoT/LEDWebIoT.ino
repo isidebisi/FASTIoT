@@ -11,6 +11,7 @@
 #define SLEEP_TIME_US SLEEP_TIME_MS*1000        //sleep time expressed in micro seconds
 #define PUMP_PIN 16
 #define SPRAY_TIME_MS 15*1000       //how long we want to spray in milli seconds
+#define MIN_SPRAY_INTERVAL_MS 5*60*1000 //minimum time between sprays in milli seconds is 5 Minutes
 // PWM properties
 #define PWM_FREQUENCY 25000
 #define LED_CHANNEL 0
@@ -106,8 +107,6 @@ void loop() {
       }
       */
 
-      //test
-      sendServerMessage(ReadTimeOfSpray, &controls);
       
       //Get time
       getTime(&controls.dayStamp, &controls.hour, &controls.minute, &controls.second);
@@ -115,7 +114,7 @@ void loop() {
       sendServerMessage(ReadOperationMode, &controls);
 
 
-      executeMode(controls.currentMode, &controls.sprayNow, &lastSprayed);
+      executeMode(controls.currentMode, &controls);
 
       Serial.print("Current mode: ");
       Serial.println(controls.currentMode);
@@ -141,6 +140,19 @@ void sprayControl(){
     ledcWrite(LED_CHANNEL, DUTYCYCLE);
     sprayStartTime = millis();
     controls.sprayNow = false;
+    
+    //Set last sprayed time
+    controls.lastSprayedDayStamp = controls.dayStamp;
+    controls.lastSprayedHour = controls.hour;
+    controls.lastSprayedMinute = controls.minute;
+    controls.lastSprayedSecond = controls.second;
+
+    controls.lastSprayedString = String(controls.lastSprayedDayStamp) + " at ";
+    controls.lastSprayedString += (controls.lastSprayedHour >= 10) ? String(controls.lastSprayedHour) : "0" + String(controls.lastSprayedHour);
+    controls.lastSprayedString += ":";
+    controls.lastSprayedString += (controls.lastSprayedMinute >= 10) ? String(controls.lastSprayedMinute) : "0" + String(controls.lastSprayedMinute);
+    controls.lastSprayedString += ":";
+    controls.lastSprayedString += (controls.lastSprayedSecond >= 10) ? String(controls.lastSprayedSecond) : "0" + String(controls.lastSprayedSecond);
   }
   
   if (controls.isSpraying) {
@@ -160,7 +172,9 @@ void sendStatusToServer(){
   Serial.println("*****UPDATING SERVER *****");  
   bool success = false;
   for (int i = 0; i <= (int) WriteWaterTankLevel; i++) {
+    if (i != WriteNextSpray){
     success = sendServerMessage((ServerMessages)i, &controls);
     if(!success) Serial.print("*** ERROR at sending Message to server: " + String(i) + "\n\n");
+    }
   }
 }

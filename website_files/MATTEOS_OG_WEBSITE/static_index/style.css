@@ -1,0 +1,199 @@
+.frame {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.frame .div {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: transparent;
+  background-blend-mode: lighten;
+  width: 1046px;
+  height: 968px;
+  position: relative;
+}
+
+.frame .overlap-group {
+  position: absolute;
+  width: 133px;
+  height: 35px;
+  top: 17px;
+  left: 21px;
+}
+
+.frame .home {
+  position: absolute;
+  width: 96px;
+  top: 0;
+  left: 0;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.frame .text-wrapper {
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.frame .span {
+  font-family: var(--regular-14-font-family);
+  font-style: var(--regular-14-font-style);
+  font-weight: var(--regular-14-font-weight);
+  letter-spacing: var(--regular-14-letter-spacing);
+  line-height: var(--regular-14-line-height);
+  font-size: var(--regular-14-font-size);
+}
+
+.frame .text-wrapper-2 {
+  position: absolute;
+  top: 0;
+  left: 58px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.frame .text-wrapper-3 {
+  position: absolute;
+  width: 96px;
+  top: 17px;
+  left: 174px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #505f98;
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.frame .overlap {
+  position: absolute;
+  width: 571px;
+  height: 45px;
+  top: 568px;
+  left: 238px;
+}
+
+.frame .rectangle {
+  position: absolute;
+  width: 571px;
+  height: 45px;
+  top: 0;
+  left: 0;
+  background-color: #111b47;
+}
+
+.frame .text-wrapper-4 {
+  position: absolute;
+  width: 160px;
+  top: 9px;
+  left: 205px;
+  font-family: "Noto Serif";
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 26px;
+  white-space: nowrap;
+}
+
+.frame .flexcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  position: absolute;
+  width: 435px;
+  height: 163px;
+  top: 281px;
+  left: 306px;
+}
+
+.frame .text {
+  position: relative;
+  align-self: stretch;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #6f7cb2;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 25px;
+}
+
+.frame .text-wrapper-5 {
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: #6f7cb2;
+  font-size: 24px;
+  letter-spacing: 1px;
+  line-height: 25px;
+}
+
+.frame .title {
+  position: absolute;
+  width: 539px;
+  top: 137px;
+  left: 254px;
+  font-family: "Noto Serif";
+  font-weight: 700;
+  color: var(--colourmainblue-900);
+  font-size: 50px;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 66px;
+}
+
+.frame .p {
+  position: absolute;
+  width: 540px;
+  top: 725px;
+  left: 253px;
+  font-family: "DM Serif Display";
+  font-weight: 400;
+  color: var(--colourmainblue-900);
+  font-size: 36px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 48px;
+}
+
+.frame .body {
+  position: absolute;
+  width: 540px;
+  top: 786px;
+  left: 253px;
+  font-family: "DM Serif Text";
+  font-weight: 400;
+  color: var(--colourmainblue-400);
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 26px;
+}
+
+/* Add these styles to your existing CSS file */
+#myThawpal:active,
+#myThawpal2:active,
+#myThawpal3:active {
+  background-image: linear-gradient(45deg, #e5e5e5 25%, transparent 25%, transparent 75%, #e5e5e5 75%),
+                    linear-gradient(-45deg, #e5e5e5 25%, transparent 25%, transparent 75%, #e5e5e5 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
