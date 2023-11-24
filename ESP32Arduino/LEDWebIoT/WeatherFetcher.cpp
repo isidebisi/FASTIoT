@@ -7,7 +7,7 @@
 
 void fetchWeatherData(const String& lat, const String& lon,
                       std::vector<float>& temperatures, std::vector<float>& humidities,
-                      std::vector<String>& dateTimeValues){
+                      std::vector<String>& dateTimeValues, std::vector<float>& windSpeeds, std::vector<float>& hours_estimation){
 
   const String key = "a93c60a4d5a36a73d22d6cc0ddc41db1";
   const String endpoint = "http://api.openweathermap.org/data/2.5/forecast?";
@@ -43,12 +43,30 @@ void fetchWeatherData(const String& lat, const String& lon,
         temperatures.push_back(temp);
         humidities.push_back(humidity);
         dateTimeValues.push_back(dt_txt);
+
+
+
+        JsonObject wind = item["wind"];
+        float windSpeed = wind["speed"].as<float>();
+        windSpeeds.push_back(windSpeed);
       }
 
+      //Extract Time
       for (int i = 0; i < temperatures.size(); ++i) {
-        String output = "Date Time: " + dateTimeValues[i] + ", Temperature: " + String(temperatures[i]) + "°C, Humidity: " + String(humidities[i]) + "%";
-        Serial.println(output);
+        size_t splitT = dateTimeValues[i].indexOf(' ');
+        String timeStamp = dateTimeValues[i].substring(splitT + 1, splitT + 9); // Assuming time part is always 8 characters
+
+        // Extracting hour
+        size_t splitHour = timeStamp.indexOf(':');
+        float hour = timeStamp.substring(0, splitHour).toInt();
+        int convertedhour = static_cast<int>(hour);
+        hours_estimation.push_back(convertedhour);
       }
+
+      //for (int i = 0; i < temperatures.size(); ++i) {
+        //String output = "Date Time: " + dateTimeValues[i] +  "Only Time extracted: " + hours_estimation[i] + ", Temperature: " + String(temperatures[i]) + "°C, Humidity: " + String(humidities[i]) + "%, Wind Speed: " + String(windSpeeds[i]);
+        //Serial.println(output);
+      //}
 
     } else {
       Serial.println("Error on HTTP request");
