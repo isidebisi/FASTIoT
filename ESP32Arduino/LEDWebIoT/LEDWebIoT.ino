@@ -83,7 +83,7 @@ void loop() {
     Previous_Millis = Actual_Millis;  
 
     //sync server every 3 loops
-    if (updateServerCounter == 3) {
+    if (updateServerCounter == 20) {
       sendStatusToServer();
       updateServerCounter = 0;
     } else {
@@ -172,7 +172,7 @@ void sendStatusToServer(){
   Serial.println("*****UPDATING SERVER *****");  
   bool success = false;
   for (int i = 0; i <= (int) WriteWaterTankLevel; i++) {
-    if (i != WriteNextSpray){
+    if (i != WriteNextSpray && i != WriteOperationMode){  //don't send automatically WriteNextSpray and WriteOperationMode commands
     success = sendServerMessage((ServerMessages)i, &controls);
     if(!success) Serial.print("*** ERROR at sending Message to server: " + String(i) + "\n\n");
     }

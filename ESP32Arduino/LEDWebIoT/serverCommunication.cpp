@@ -29,7 +29,7 @@ void exchangeServer(String* sendData, String* receiveData) {
       //If the received data is LED_is_off, we set LOW the LED pin
       *receiveData = response_body;
     } else { //End of response_code = 200
-    Serial.print("error sending POST, Code != 200 as it should be");
+    Serial.print("error sending POST, Code != 200 as it should be\n");
     }
   }//END of response_code > 0
   
