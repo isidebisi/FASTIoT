@@ -25,5 +25,6 @@ void manualMode(ControlVariables* controls);
 void timerMode(ControlVariables* controls);
 void automaticMode(ControlVariables* controls);
 void executeMode(Mode mode, ControlVariables* controls);
+double automaticAlgorithm();
 
 #endif // MODES_H

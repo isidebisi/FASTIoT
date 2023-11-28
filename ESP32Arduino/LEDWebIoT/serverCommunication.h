@@ -9,7 +9,7 @@
 
 
 // DEFINES
-#define SERVER_URL "https://fastiotepfl.000webhostapp.com/esp32_update.php"
+#define SERVER_URL "https://thawpal.com/esp32_update.php"
 
 
 //Function prototypes

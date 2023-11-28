@@ -32,16 +32,48 @@ void timerMode(ControlVariables* controls) {
 
 void automaticMode(ControlVariables * control) {
 
-  /* TODO:
-  * Read control->lastSprayedHour and control->lastSprayedMinute
-  * Decide from those numbers when to spray
-  * To spray simply write control->sprayNow = true;
-  unsigned int lastSprayedSecond = TIMENOTSET;
-  *
-  *
-  *
-  *
-  */
+  //get spraying Frequency in 1/h from automaticAlgorithm
+  double sprayFrequency = automaticAlgorithm();
+  
+  //convert frequency in interval in minutes
+  int sprayIntervalMinutes = 60 / sprayFrequency;
+  int lastSprayedMinutesDay = control->lastSprayedHour * 60 + control->lastSprayedMinute;
+  int currentMinutesDay = control->hour * 60 + control->minute;
+
+  //check for day overflow and adjust
+  if (lastSprayedMinutesDay + sprayIntervalMinutes > 24*60) {
+  lastSprayedMinutesDay = lastSprayedMinutesDay - 24*60;
+  }
+
+  //Spray if current time is greater than lastSprayedTime + interval
+  if (currentMinutesDay >= lastSprayedMinutesDay + sprayIntervalMinutes) {
+    control->sprayNow = true;
+  }
+}
+
+void offMode(ControlVariables* controls) {
+    controls->sprayNow = false;
+}
+
+void executeMode(Mode mode, ControlVariables* controls) {
+    switch(mode) {
+        case MANUAL:
+            manualMode(controls);
+            break;
+        case TIMER:
+            timerMode(controls);
+            break;
+        case AUTOMATIC:
+            automaticMode(controls);
+            break;
+        case OFF:
+            offMode(controls);
+            break;
+    }
+}
+
+
+double automaticAlgorithm(){
     std::vector<float> temperatures;
     std::vector<float> humidities;
     std::vector<String> dateTimeValues;
@@ -319,29 +351,9 @@ void automaticMode(ControlVariables * control) {
 
     for (int i = 0; i < SprayingFrequency.size(); ++i) {
         String output = "Spraying Frequency: " + String(SprayingFrequency[i], 6) + "/hour between " + String(time_interval_start[i]) + " and " + String(time_interval_finish[i]) + ", with critically at level " + String(Critical[i]);
-        Serial.println(output);
+        //Serial.println(output);
     }
   //delay(30000);
-
-}
-
-void offMode(ControlVariables* controls) {
-    controls->sprayNow = false;
-}
-
-void executeMode(Mode mode, ControlVariables* controls) {
-    switch(mode) {
-        case MANUAL:
-            manualMode(controls);
-            break;
-        case TIMER:
-            timerMode(controls);
-            break;
-        case AUTOMATIC:
-            automaticMode(controls);
-            break;
-        case OFF:
-            offMode(controls);
-            break;
-    }
+    Serial.print("Spraying frequency = " + String(SprayingFrequency[0]));
+    return SprayingFrequency[0];
 }
