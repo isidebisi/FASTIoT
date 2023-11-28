@@ -6,6 +6,6 @@
 
 void fetchWeatherData(const String& lat, const String& lon,
                       std::vector<float>& temperatures, std::vector<float>& humidities,
-                      std::vector<String>& dateTimeValues);
+                      std::vector<String>& dateTimeValues, std::vector<float>& windSpeeds, std::vector<float>& hours_estimation);
 
 #endif
