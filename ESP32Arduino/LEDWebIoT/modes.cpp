@@ -12,7 +12,7 @@
 void manualMode(ControlVariables* controls) {
     Serial.println("We will now spray... Manual Mode");
     controls->sprayNow = true;
-
+    controls->currentMode = OFF;
     //change mode back to OFF
     sendServerMessage(WriteOperationMode, controls);
     Serial.println("Spray now command executing !");
@@ -322,6 +322,7 @@ void automaticMode(ControlVariables * control) {
         Serial.println(output);
     }
   //delay(30000);
+
 }
 
 void offMode(ControlVariables* controls) {
