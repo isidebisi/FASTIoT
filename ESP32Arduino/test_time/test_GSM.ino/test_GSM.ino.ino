@@ -4,6 +4,10 @@
 */
 #include "utilities.h"
 
+#include <TinyGsmClient.h>
+#include <ArduinoHttpClient.h>
+
+
 // Set serial for debug console (to the Serial Monitor, default speed 115200)
 #define SerialMon Serial
 
@@ -29,12 +33,11 @@ const char wifiSSID[] = "Ismael";
 const char wifiPass[] = "hallohallo";
 
 // Server details
-const char server[]   = "fastiot.wuaze.com/esp32_update.php";
+const char server[]   = "thawpal.com";
 const char resource[] = "rOM=1";
 const int  port       = 80;
 
-#include <TinyGsmClient.h>
-#include <ArduinoHttpClient.h>
+
 
 
 
@@ -175,10 +178,46 @@ void loop()
     }
 #endif
 
-    SerialMon.print(F("Performing HTTP GET request... "));
+    //SerialMon.print(F("Performing HTTP GET request... "));
     String contentType = "application/x-www-form-urlencoded";
     String postURL = "/esp32_update.php";
-    int err = http.post(postURL, contentType, resource);
+
+
+    Serial.println("making POST request");
+  String postData = "rToS=1";
+
+  http.beginRequest();
+  http.post("/esp32_update.php");
+  http.sendHeader("Content-Type", "application/x-www-form-urlencoded");
+  http.sendHeader("Content-Length", postData.length());
+  http.beginBody();
+  http.print(postData);
+  http.endRequest();
+
+  // read the status code and body of the response
+  int statusCode =  http.responseStatusCode();
+  String response = http.responseBody();
+
+  SerialMon.print("Status code: ");
+  SerialMon.println(statusCode);
+  SerialMon.print("Response: ");
+  SerialMon.println(response);
+
+
+
+
+    /*
+    //int err = http.get(resource);
+    http.connectionKeepAlive();
+    http.beginRequest();
+    int err = http.post("/");
+    http.sendHeader(F("Content-Type"), F("application/x-www-form-urlencoded"));
+    http.sendHeader(F("Content-Length"), String(resource).length());
+    http.beginBody();
+    http.println(resource);   
+
+
+
     if (err != 0) {
         SerialMon.println(F("failed to connect"));
         delay(10000);
@@ -216,7 +255,7 @@ void loop()
 
     SerialMon.print(F("Body length is: "));
     SerialMon.println(body.length());
-
+*/
     // Shutdown
 
     http.stop();

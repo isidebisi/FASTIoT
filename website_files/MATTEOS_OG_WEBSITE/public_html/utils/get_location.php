@@ -44,9 +44,9 @@ function makeCurlRequest($url)
 }
 
 $servername = "localhost";
-$dBUsername = "id21525238_id21476219_ismaelfrei";
-$dBPassword = "FASTIoT_2023";
-$dBName = "id21525238_id21476219_esp32";
+$dBUsername = "thawpalc_01";
+$dBPassword = "fastiotepfl23";
+$dBName = "thawpalc_0";
 
 // Connect to the database
 $conn = connectToDatabase($servername, $dBUsername, $dBPassword, $dBName);
@@ -148,9 +148,9 @@ function makeHttpRequest($url)
 }
 
 $servername = "localhost";
-$dBUsername = "id21525238_id21476219_ismaelfrei";
-$dBPassword = "FASTIoT_2023";
-$dBName = "id21525238_id21476219_esp32";
+$dBUsername = "thawpalc_01";
+$dBPassword = "fastiotepfl23";
+$dBName = "thawpalc_0";
 
 // Connect to the database
 $conn = connectToDatabase($servername, $dBUsername, $dBPassword, $dBName);

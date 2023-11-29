@@ -1,9 +1,9 @@
 <?php
 
 $servername = "localhost";
-$dBUsername = "id21476219_ismaelfrei";
-$dBPassword = "FASTIoT_2023";
-$dBName = "id21476219_esp32";
+$dBUsername = "thawpalc_01";
+$dBPassword = "fastiotepfl23";
+$dBName = "thawpalc_0";
 
 $conn = mysqli_connect($servername, $dBUsername, $dBPassword, $dBName);
 

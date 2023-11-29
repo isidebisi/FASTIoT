@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static_schedule/globals.css" />
+    <link rel="stylesheet" href="static_schedule/styleguide.css" />
+    <link rel="stylesheet" href="static_schedule/style.css" />
+    <style>
+      /* Add your additional styles here if needed */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      input {
+        width: 100%;
+        margin-bottom: 10px; /* Adjust margin as needed */
+      }
+
+      /* Custom styles for the new structure */
+      .activation-container {
+        position: absolute;
+        top: 430px;
+        left: 289px;
+        width: 468px;
+        font-family: "DM Serif Text";
+        font-weight: 400;
+        color: #505f98;
+        text-align: center;
+        margin: auto;
+      }
+
+      #activationCount {
+        width: 100%;
+        margin-bottom: 10px; /* Adjust margin-bottom as needed */
+        color: #505f98; /* Change text color */
+        font-family: "DM Serif Text", sans-serif; /* Change font family */
+        font-size: 16px; /* Change font size */
+        /* Add any additional styles as needed */
+      }
+
+      .activation-container button {
+        width: 100%;
+        color: #fff;
+        background-color: #111b47;
+        font-family: "DM Serif Text", sans-serif; /* Change font family */
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .activation-container select {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .time-fields-container {
+        position: absolute;
+        top: 480px;
+        left: 289px;
+        width: 468px;
+        color: #505f98; /* Change text color */
+        font-family: "DM Serif Text", sans-serif; /* Change font family */
+        font-size: 16px; /* Change font size */
+        text-align: center;
+        margin: auto;
+      }
+
+      .text-wrapper-4 {
+        position: static;
+        width: 468px;
+        top: 430px;
+        left: 289px;
+        font-family: "DM Serif Text";
+        font-weight: 400;
+        color: #505f98;
+        font-size: 24px;
+        text-align: center;
+        letter-spacing: 0;
+        line-height: 26px;
+        margin-bottom: 40px;
+      }
+
+      #scheduledModeContainer {
+        display: none; /* Default cursor for disabled state */
+      }
+
+      #scheduledModeContainer.enabled {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="div">
+        <div class="overlap">
+          <div class="text-wrapper">Home</div>
+          <div class="text-wrapper-2">My ThawPal</div>
+        </div>
+        <div class="text-wrapper-3">Free Quote</div>
+        <div class="overlap-group">
+          <p class="p">
+            Please enter the hours of use of your device to program the spraying. Don’t forget to confirm!
+          </p>
+          <div class="title">Setting Scheduled Mode</div>
+        </div>
+
+        <!-- Container for the number of activations -->
+        <div class="activation-container">
+          <p class="text-wrapper-4">Select the number of activations:</p>
+          <select id="activationCount">
+            <option value="1">1 Activation</option>
+            <option value="2">2 Activations</option>
+            <option value="3">3 Activations</option>
+            <!-- Add more options as needed -->
+          </select>
+          <button onclick="generateActivationTimeFields()" id="activationButton">SELECT NUMBER OF ACTIVATION TIMES</button>
+        </div>
+
+        <!-- Container to dynamically generate activation time fields -->
+        <div id="timeFieldsContainer" class="time-fields-container"></div>
+
+        <!-- Button for enabling scheduled mode -->
+        <div class="div-wrapper" id="scheduledModeContainer">
+          <div class="text-wrapper-5">SCHEDULED MODE ENABLED</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Adding JavaScript for dynamic field generation -->
+    <script>
+      // Define an array to store activation times
+      var activationTimes = [];
+
+      function generateActivationTimeFields() {
+  var selectedOption = document.getElementById("activationCount").value;
+  var activationCount = parseInt(selectedOption);
+  var container = document.getElementById("timeFieldsContainer");
+  var button = document.getElementById("activationButton");
+  var button_2 = document.getElementById("scheduledModeContainer");
+
+  container.innerHTML = ""; // Clear previous content
+  activationTimes = []; // Clear the activationTimes array
+
+  // Hide the button
+  button.style.display = "none";
+
+  for (var i = 1; i <= activationCount; i++) {
+    var label = document.createElement("p");
+    label.innerText = "Activation " + i + " Time:";
+
+    var input = document.createElement("input");
+    input.type = "time";
+    input.name = "activationTimes[" + i + "]";
+    input.style.marginBottom = "10px"; // Adjust margin as needed
+
+    // Add an event listener to the input to update the activationTimes array
+    input.addEventListener("change", function (event) {
+      var match = event.target.name.match(/\[(.*?)\]/);
+
+      if (match) {
+        var activationIndex = parseInt(match[1]) - 1;
+        activationTimes[activationIndex] = event.target.value;
+
+        // Log the activationTimes array when it's updated
+        console.log("Activation Times:", activationTimes);
+
+        // Check if all activation times are selected
+        if (activationTimes.length === activationCount) {
+          button_2.style.display = "block";
+          
+        }
+      } else {
+        console.error("Unable to extract activation index from input name:", event.target.name);
+      }
+    });
+
+    container.appendChild(label);
+    container.appendChild(input);
+  }
+}
+
+      // Function to get the saved activation times
+      function getActivationTimes() {
+        return activationTimes;
+      }
+      
+      const scheduledModeButton = document.getElementById('scheduledModeContainer');
+
+      scheduledModeButton.addEventListener('click', function () {
+        
+        // You can use the getActivationTimes() function to retrieve the saved times
+        var savedActivationTimes = getActivationTimes();
+        console.log(savedActivationTimes);
+        window.location.href = 'MyThawPal.html';
+        
+
+        // Set the mode to 'SCHEDULED'
+        var mode = 'SCHEDULED';
+
+        // Send a POST request to the server with the selected mode and activation times
+        fetch('utils/update_next_spray.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: 'mode=' + encodeURIComponent(mode) + '&activationTimes=' + encodeURIComponent(JSON.stringify(savedActivationTimes)),
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data); // Log the response from the server
+          // Redirect to 'MyThawPal.html' if the database is updated successfully
+          if (data === 'Update in use script executed successfully') {
+            window.location.href = 'MyThawPal.html';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+        fetch('utils/update_database.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: 'mode=' + encodeURIComponent(mode) + '&activationTimes=' + encodeURIComponent(JSON.stringify(savedActivationTimes)),
+        })
+        .then(response => response.text())
+        .then(data => {
+          console.log(data); // Log the response from the server
+          // Redirect to 'MyThawPal.html' if the database is updated successfully
+          if (data === 'Database updated successfully') {
+            window.location.href = 'MyThawPal.html';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      });
+
+      scheduledModeButton.style.cursor = 'pointer';
+
+      
+
+      
+    </script>
+  </body>
+</html>

@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$dBUsername = "id21525238_id21476219_ismaelfrei";
-$dBPassword = "FASTIoT_2023";
-$dBName = "id21525238_id21476219_esp32";
+$dBUsername = "thawpalc_01";
+$dBPassword = "fastiotepfl23";
+$dBName = "thawpalc_0";
 
 $conn = mysqli_connect($servername, $dBUsername, $dBPassword, $dBName);
 
@@ -14,11 +14,11 @@ if (!$conn) {
 
 
 // Retrieve the current mode from the database
-$result_BOTTOM = mysqli_query($conn, "SELECT status FROM Next_spray WHERE id = 1");
+$result_BOTTOM = mysqli_query($conn, "SELECT status FROM Risk_of_ice WHERE id = 1");
 $row_BOTTOM = mysqli_fetch_assoc($result_BOTTOM);
 
 // Map the numeric status to the corresponding mode
-$mode = $row_BOTTOM['status'];
+$mode = $row_BOTTOM['status'] . '%';
 
 
 
