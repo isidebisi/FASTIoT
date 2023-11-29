@@ -65,6 +65,7 @@ bool sendServerMessage(ServerMessages message, ControlVariables* control) {
         control->scheduledSprayHour[i] = TIMENOTSET;
         control->scheduledSprayHour[i] = TIMENOTSET;
       }
+      //expected response for example : "NS13:22, 21:14" which means next sprays are programmed for 12:22 and 21:14
       while (receiveData.indexOf(":") != -1) {
         control->scheduledSprayHour[iter] = receiveData.substring(receiveData.indexOf(":")-2, receiveData.indexOf(":")).toInt();
         control->scheduledSprayHour[iter] = receiveData.substring(receiveData.indexOf(":")+1, receiveData.indexOf(":")+3).toInt();

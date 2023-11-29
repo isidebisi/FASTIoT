@@ -184,7 +184,7 @@ void loop()
 
 
     Serial.println("making POST request");
-  String postData = "rToS=1";
+  String postData = "rNS=1";
 
   http.beginRequest();
   http.post("/esp32_update.php");
