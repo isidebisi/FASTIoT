@@ -7,9 +7,24 @@
 #include "time.h"
 #include "serverCommunication.h"
 
+
+// DEFINE INPUTS/OUTPUTS
+#define EXT_PUMP_PIN 16
+#define EXT_PUMP2_PIN 17
+#define EXT_PUMP3_PIN 18
+#define EXT_PUMP4_PIN 19
+
+#define VALVE_PIN 
+#define WATER_TANK_LEVEL_PROBE_PIN 36
+#define WATER_TANK_LEVEL_LOW_PIN 39
+#define WATER_TANK_LEVEL_MEDIUM_PIN 34
+#define WATER_TANK_LEVEL_HIGH_PIN 35
+
+
+
 #define SLEEP_TIME_MS 1*1000                    //sleep time expressed in milli seconds
 #define SLEEP_TIME_US SLEEP_TIME_MS*1000        //sleep time expressed in micro seconds
-#define PUMP_PIN 16
+
 #define SPRAY_TIME_MS 15*1000       //how long we want to spray in milli seconds
 #define MIN_SPRAY_INTERVAL_MS 5*60*1000 //minimum time between sprays in milli seconds is 5 Minutes
 // PWM properties
@@ -34,10 +49,15 @@ unsigned int Actual_Millis, Previous_Millis;
 
 unsigned int sprayStartTime, lastSprayed = 0;
 unsigned int updateServerCounter = 2;
+unsigned int iterStatusMessage = 0;
 
 
 //Inputs/outputs
-int LED = PUMP_PIN;                          //Connect LED on this pin (add 150ohm resistor)
+int LED = EXT_PUMP_PIN;                          //Connect LED on this pin (add 150ohm resistor)
+int pump2 = EXT_PUMP2_PIN;
+int pump3 = EXT_PUMP3_PIN;
+int pump4 = EXT_PUMP4_PIN;
+
 
 ControlVariables controls;
 
@@ -45,16 +65,20 @@ ControlVariables controls;
 void goToDeepSleep();
 void sprayControl();
 void sendStatusToServer();
+void checkRefillWaterTank();
 
 
 void setup() {
   delay(10);
   Serial.begin(115200);                   //Start monitor
-  pinMode(PUMP_PIN, OUTPUT);              //Set pin PUMP_PIN as OUTPUT
+  pinMode(EXT_PUMP_PIN, OUTPUT);              //Set pin EXT_PUMP_PIN as OUTPUT
+  pinMode(EXT_PUMP2_PIN, OUTPUT);
+  pinMode(EXT_PUMP3_PIN, OUTPUT);
+  pinMode(EXT_PUMP4_PIN, OUTPUT);
 
     // PWM setup
   ledcSetup( LED_CHANNEL , PWM_FREQUENCY , PWM_RESOLUTION );  // Set up PWM
-  ledcAttachPin( PUMP_PIN , LED_CHANNEL ) ;                   // Attach PWM to the LED pin
+  ledcAttachPin( EXT_PUMP_PIN , LED_CHANNEL ) ;                   // Attach PWM to the LED pin
 
   WiFi.begin(ssid, password);             //Start wifi connection
   Serial.print("Connecting...");
@@ -62,6 +86,9 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
+
+  pinMode(23,OUTPUT);
+  digitalWrite(23,1);
 
   Serial.print("Connected, my IP: ");
   Serial.println(WiFi.localIP());
@@ -82,15 +109,10 @@ void loop() {
   if(Actual_Millis - Previous_Millis > SLEEP_TIME_MS){
     Previous_Millis = Actual_Millis;  
 
-    //sync server every 3 loops
-    if (updateServerCounter == 20) {
-      sendStatusToServer();
-      updateServerCounter = 0;
-    } else {
-      updateServerCounter++;
-    }
-    //test
-    //Serial.println("Test message loop");
+    
+    //gradually update server
+    sendStatusToServer();
+    
     
 
     if(WiFi.status()== WL_CONNECTED){                   //Check WiFi connection status  
@@ -137,7 +159,12 @@ void goToDeepSleep(){
 void sprayControl(){
   if (controls.sprayNow && controls.isSpraying == false) {
     controls.isSpraying = true;
-    ledcWrite(LED_CHANNEL, DUTYCYCLE);
+
+    ledcWrite(LED_CHANNEL, 255);
+    digitalWrite(EXT_PUMP2_PIN,HIGH);
+    digitalWrite(EXT_PUMP3_PIN,HIGH);
+    digitalWrite(EXT_PUMP4_PIN,HIGH);
+
     sprayStartTime = millis();
     controls.sprayNow = false;
     
@@ -162,19 +189,30 @@ void sprayControl(){
       controls.isSpraying = false;
       
       ledcWrite( LED_CHANNEL , 0 );
+      digitalWrite(EXT_PUMP2_PIN,0);
+      digitalWrite(EXT_PUMP3_PIN,0);
+      digitalWrite(EXT_PUMP4_PIN,0);
     }
   } else {
     Serial.println("... not spraying ...");
+    ledcWrite(LED_CHANNEL, 0);
+    digitalWrite(EXT_PUMP2_PIN,0);
+    digitalWrite(EXT_PUMP3_PIN,0);
+    digitalWrite(EXT_PUMP4_PIN,0);
   }
 }
 
 void sendStatusToServer(){
-  Serial.println("*****UPDATING SERVER *****");  
+  //Serial.println("*****UPDATING SERVER *****");  
   bool success = false;
-  for (int i = 0; i <= (int) WriteWaterTankLevel; i++) {
-    if (i != WriteNextSpray && i != WriteOperationMode){  //don't send automatically WriteNextSpray and WriteOperationMode commands
-    success = sendServerMessage((ServerMessages)i, &controls);
-    if(!success) Serial.print("*** ERROR at sending Message to server: " + String(i) + "\n\n");
+  
+  if (iterStatusMessage != WriteNextSpray && iterStatusMessage != WriteOperationMode){  //don't send automatically WriteNextSpray and WriteOperationMode commands
+    success = sendServerMessage((ServerMessages)iterStatusMessage, &controls);
+    if(!success) Serial.print("*** ERROR at sending Message to server: " + String(iterStatusMessage) + "\n\n");
     }
+  iterStatusMessage = (iterStatusMessage < WriteWaterTankLevel) ? iterStatusMessage + 1 : 0;
   }
+
+void checkRefillWaterTank(){
+
 }

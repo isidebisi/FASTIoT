@@ -36,18 +36,24 @@ void automaticMode(ControlVariables * control) {
   double sprayFrequency = automaticAlgorithm();
   
   //convert frequency in interval in minutes
-  int sprayIntervalMinutes = 60 / sprayFrequency;
-  int lastSprayedMinutesDay = control->lastSprayedHour * 60 + control->lastSprayedMinute;
-  int currentMinutesDay = control->hour * 60 + control->minute;
+  if(sprayFrequency >0){
+    int sprayIntervalMinutes = 60 / sprayFrequency;
+    int lastSprayedMinutesDay = control->lastSprayedHour * 60 + control->lastSprayedMinute;
+    int currentMinutesDay = control->hour * 60 + control->minute;
 
-  //check for day overflow and adjust
-  if (lastSprayedMinutesDay + sprayIntervalMinutes > 24*60) {
-  lastSprayedMinutesDay = lastSprayedMinutesDay - 24*60;
-  }
+    //check for day overflow and adjust
+    if (lastSprayedMinutesDay + sprayIntervalMinutes > 24*60) {
+    lastSprayedMinutesDay = lastSprayedMinutesDay - 24*60;
+    }
 
-  //Spray if current time is greater than lastSprayedTime + interval
-  if (currentMinutesDay >= lastSprayedMinutesDay + sprayIntervalMinutes) {
-    control->sprayNow = true;
+    //Spray if current time is greater than lastSprayedTime + interval
+    if (currentMinutesDay >= lastSprayedMinutesDay + sprayIntervalMinutes) {
+      Serial.print("CurrentMin: " + String(currentMinutesDay) + " LastSpray: " + String(lastSprayedMinutesDay) + " sprayInterval: " + String(sprayIntervalMinutes) + "\n");
+      Serial.println("SPRAYING NOW IN AUTOMATIC MODE");
+      control->sprayNow = true;
+    }
+  } else {
+    Serial.println("Automatic mode no spraying needed");
   }
 }
 
@@ -355,5 +361,6 @@ double automaticAlgorithm(){
     }
   //delay(30000);
     Serial.print("Spraying frequency = " + String(SprayingFrequency[0]));
+    Serial.println(" SprayInterval = " + String(1/SprayingFrequency[0]));
     return SprayingFrequency[0];
 }

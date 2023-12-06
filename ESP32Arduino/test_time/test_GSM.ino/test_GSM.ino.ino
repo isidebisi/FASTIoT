@@ -41,13 +41,8 @@ const int  port       = 80;
 
 
 
-#ifdef DUMP_AT_COMMANDS
-#include <StreamDebugger.h>
-StreamDebugger debugger(SerialAT, SerialMon);
-TinyGsm        modem(debugger);
-#else
+
 TinyGsm        modem(SerialAT);
-#endif
 
 
 TinyGsmClient client(modem);
@@ -62,6 +57,7 @@ void setup()
 {
     Serial.begin(115200);
     // Turn on DC boost to power on the modem
+    /*
 #ifdef BOARD_POWERON_PIN
     pinMode(BOARD_POWERON_PIN, OUTPUT);
     digitalWrite(BOARD_POWERON_PIN, HIGH);
@@ -77,7 +73,7 @@ void setup()
     digitalWrite(BOARD_PWRKEY_PIN, HIGH);
     delay(1000);
     digitalWrite(BOARD_PWRKEY_PIN, LOW);
-
+*/
     // Set modem baud
     SerialAT.begin(115200, SERIAL_8N1, MODEM_RX_PIN, MODEM_TX_PIN);
 
@@ -103,10 +99,18 @@ void setup()
     String result;
     result = modem.setNetworkMode((NetworkMode) 2);
     if (modem.waitResponse(10000L) != 1) {
-        DBG(" setNetworkMode faill");
+        Serial.println(" setNetworkMode fail");
         return ;
     }
 #endif
+
+    String name = modem.getModemName();
+    Serial.print("Modem Name: ");
+    Serial.println(String(name));
+
+    String modemInfo = modem.getModemInfo();
+    Serial.print("Modem Info: ");
+    Serial.println(String(modemInfo));
 }
 
 void loop()
@@ -119,11 +123,7 @@ void loop()
           return;
       }*/
 
-    String name = modem.getModemName();
-    DBG("Modem Name:", name);
 
-    String modemInfo = modem.getModemInfo();
-    DBG("Modem Info:", modemInfo);
 
 #if TINY_GSM_USE_GPRS
     // Unlock your SIM card with a PIN if needed
@@ -144,7 +144,7 @@ void loop()
     SerialMon.println(" success");
 #endif
 
-#if TINY_GSM_USE_GPRS && defined TINY_GSM_MODEM_XBEE
+#if TINY_GSM_USE_GPRS 
     // The XBee must run the gprsConnect function BEFORE waiting for network!
     modem.gprsConnect(apn, gprsUser, gprsPass);
 #endif
