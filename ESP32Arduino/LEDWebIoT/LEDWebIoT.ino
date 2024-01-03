@@ -12,13 +12,14 @@
 #define EXT_PUMP_PIN 16
 #define EXT_PUMP2_PIN 17
 #define EXT_PUMP3_PIN 18
-#define EXT_PUMP4_PIN 19
+#define INT_PUMP 19
 
 #define VALVE_PIN 
 #define WATER_TANK_LEVEL_PROBE_PIN 36
 #define WATER_TANK_LEVEL_LOW_PIN 39
 #define WATER_TANK_LEVEL_MEDIUM_PIN 34
-#define WATER_TANK_LEVEL_HIGH_PIN 35
+#define WATER_TANK_LEVEL_HIGH_PIN 3
+#define BUTTON_PIN 14
 
 
 
@@ -56,8 +57,8 @@ unsigned int iterStatusMessage = 0;
 int LED = EXT_PUMP_PIN;                          //Connect LED on this pin (add 150ohm resistor)
 int pump2 = EXT_PUMP2_PIN;
 int pump3 = EXT_PUMP3_PIN;
-int pump4 = EXT_PUMP4_PIN;
-
+int pump4 = INT_PUMP;
+int button;
 
 ControlVariables controls;
 
@@ -74,7 +75,9 @@ void setup() {
   pinMode(EXT_PUMP_PIN, OUTPUT);              //Set pin EXT_PUMP_PIN as OUTPUT
   pinMode(EXT_PUMP2_PIN, OUTPUT);
   pinMode(EXT_PUMP3_PIN, OUTPUT);
-  pinMode(EXT_PUMP4_PIN, OUTPUT);
+  pinMode(INT_PUMP, OUTPUT);
+
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
 
     // PWM setup
   ledcSetup( LED_CHANNEL , PWM_FREQUENCY , PWM_RESOLUTION );  // Set up PWM
@@ -104,7 +107,9 @@ void loop() {
   //We make the refresh loop using millis() so we don't have to sue delay();
   Actual_Millis = millis();
   
+  button = digitalRead(BUTTON_PIN);
 
+  digitalWrite(INT_PUMP, button);
   
   if(Actual_Millis - Previous_Millis > SLEEP_TIME_MS){
     Previous_Millis = Actual_Millis;  
@@ -163,7 +168,6 @@ void sprayControl(){
     ledcWrite(LED_CHANNEL, 255);
     digitalWrite(EXT_PUMP2_PIN,HIGH);
     digitalWrite(EXT_PUMP3_PIN,HIGH);
-    digitalWrite(EXT_PUMP4_PIN,HIGH);
 
     sprayStartTime = millis();
     controls.sprayNow = false;
@@ -191,14 +195,13 @@ void sprayControl(){
       ledcWrite( LED_CHANNEL , 0 );
       digitalWrite(EXT_PUMP2_PIN,0);
       digitalWrite(EXT_PUMP3_PIN,0);
-      digitalWrite(EXT_PUMP4_PIN,0);
+
     }
   } else {
     Serial.println("... not spraying ...");
     ledcWrite(LED_CHANNEL, 0);
     digitalWrite(EXT_PUMP2_PIN,0);
     digitalWrite(EXT_PUMP3_PIN,0);
-    digitalWrite(EXT_PUMP4_PIN,0);
   }
 }
 

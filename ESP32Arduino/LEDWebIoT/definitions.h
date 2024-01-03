@@ -74,7 +74,7 @@ struct ControlVariables {
 
   //Tank and Salt
   TankLevel waterTankLevel = EMPTY;
-  bool saltLevel = false;
+  bool saltLevel = true;
   unsigned int saltConcentration = 0;
 
 };
