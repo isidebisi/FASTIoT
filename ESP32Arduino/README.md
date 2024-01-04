@@ -1,8 +1,3 @@
-# FASTIoT
-Certainly! Below is a sample README file for the microcontroller component of your Thawpal project:
-
----
-
 # Thawpal Microcontroller Documentation
 
 ## Overview
@@ -69,6 +64,3 @@ The device's control loop comprises the following sequence of operations:
 
 For detailed code implementation, functionalities, and further insights, refer to the Thawpal [GitHub Repository](https://github.com/isidebisi/FASTIoT). The repository contains approximately 1000 lines of code, facilitating comprehensive understanding and development.
 
----
-
-Feel free to modify this README to better fit your project's specific requirements and details!
