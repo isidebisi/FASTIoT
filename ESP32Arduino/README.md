@@ -62,5 +62,5 @@ The device's control loop comprises the following sequence of operations:
 
 ## GitHub Repository
 
-For detailed code implementation, functionalities, and further insights, refer to the Thawpal [GitHub Repository](https://github.com/isidebisi/FASTIoT). The repository contains approximately 1000 lines of code, facilitating comprehensive understanding and development.
+For detailed code implementation, functionalities, and further insights, refer to the Thawpal [GitHub Repository](https://github.com/isidebisi/FASTIoT). The arduino part of the repository contains approximately 1000 lines of code, facilitating comprehensive understanding and development.
 
